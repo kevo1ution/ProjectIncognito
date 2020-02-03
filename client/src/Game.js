@@ -33,3 +33,37 @@ function Game() {
 }
 
 export default Game;
+
+/**
+ * Rough draft of code
+ * currentCharacter = //enum.demolisioner, enum.recon, enum.scout, enum.null
+ * characters = {demolisioner, recon, scout}
+ * currentLevel = 0 - maxLevel
+ * preload(){
+ * 
+ * }
+ * 
+ * create(){
+ *  loadUI() //load ui of the game
+ *  loadLevel() //loads tile for level
+ * }
+ * 
+ * update(){
+ *  
+ *  //keyboard events
+ *  if(currentCharacter !== enum.null){
+ *    if(w is pressed){
+ *      characters[currentCharacter].moveUp()
+ *    }
+ *    if(a,s,d is pressed)... etc.
+ *    if(space pressed) toggleCharacter();
+ *  }
+ * }
+ * 
+ * 
+ * characters <- demolisher, recon, scout
+ * character{
+ *  position {x, y}
+ *  sprite
+ * }
+ */
