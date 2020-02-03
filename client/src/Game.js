@@ -16,7 +16,8 @@ const game = new Phaser.Game(config);
 
 function preload() {
   this.load.image('tiles', 'assets/gridtiles.png');
-  this.load.tilemapTiledJSON('map', 'assets/simple-map.json');
+  this.load.image('tiles', 'assets/gridtiles.png');
+  this.load.tilemapTiledJSON('map', 'assets/tutorial.json');
 }
 
 function create() {
