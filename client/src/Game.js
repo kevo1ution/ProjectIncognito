@@ -36,16 +36,40 @@ function create() {
   // blockedLayer.setCollision([290, 276]);
   // console.log(blockedLayer.layer.data);
 
-  player = this.add.rectangle(32 + 16, 32 + 16, 26, 26, 0xffff00);
+  let players = [
+    this.add.rectangle(32 + 16, 32 + 16, 26, 26, 0xffff00),
+    this.add.rectangle(64 + 16, 32 + 16, 26, 26, 0x00ffff),
+    this.add.rectangle(32 + 16, 64 + 16, 26, 26, 0xff00ff)
+  ];
+  let curPlayer = 0;
+  let player = players[0];
   cursors = this.input.keyboard.createCursorKeys();
 
   let currentTween;
-  const tweenDuration = 100;
+  const tweenDuration = 200;
   const blockIndexCollidable = [290, 276];
   function hasObstacle(plrX, plrY) {
     const tile = blockedLayer.getTileAtWorldXY(plrX, plrY);
-    return tile && blockIndexCollidable.includes(tile.index);
+    const plrPoint = blockedLayer.worldToTileXY(plrX, plrY);
+
+    const plrPoints = players.map(plr => {
+      return blockedLayer.worldToTileXY(plr.x, plr.y);
+    });
+
+    return (
+      (tile && blockIndexCollidable.includes(tile.index)) ||
+      plrPoints.some(point => point.x === plrPoint.x && point.y === plrPoint.y)
+    );
   }
+  cursors.space.on(
+    "down",
+    function() {
+      curPlayer++;
+      curPlayer = curPlayer % 3;
+      player = players[curPlayer];
+    },
+    this
+  );
   cursors.up.on(
     "down",
     function() {
