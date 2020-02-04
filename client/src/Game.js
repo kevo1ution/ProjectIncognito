@@ -37,7 +37,7 @@ function create() {
   // console.log(blockedLayer.layer.data);
 
   let players = [
-    this.add.rectangle(32 + 16, 32 + 16, 26, 26, 0x000000),
+    this.add.rectangle(32 + 16, 32 + 16, 26, 26, 0x0000ff),
     this.add.rectangle(64 + 16, 32 + 16, 26, 26, 0x00ffff),
     this.add.rectangle(32 + 16, 64 + 16, 26, 26, 0xff00ff)
   ];
