@@ -1,20 +1,11 @@
 import Phaser from "phaser";
 import React from "react";
+import config from "./config/config";
 
 let player, cursors;
-const config = {
-  type: Phaser.AUTO,
-  width: 320,
-  height: 640,
-  scene: {
-    preload: preload,
-    create: create,
-    update: update
-  }
-};
 const objectMap = [];
 
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
 
 function preload() {
   this.load.image("tilesBackground", "assets/gridtiles.png");
@@ -158,12 +149,13 @@ export default Game;
  * characters = {demolisioner, recon, scout}
  * currentLevel = 0 - maxLevel
  * preload(){
- *
+ *  //load all of the images and map
  * }
  *
  * create(){
  *  loadUI() //load ui of the game
- *  loadLevel() //loads tile for level
+ *
+ *  //setup controls
  * }
  *
  * update(){
