@@ -32,15 +32,10 @@ function create() {
   // blockedLayer.setCollision([290, 276]);
   // console.log(blockedLayer.layer.data);
 
-  const manBody = this.add.rectangle(64 + 16, 32 + 16, 26, 26, 0x00ffff)
-  const manBody2 = this.add.rectangle(32 + 16, 64 + 16, 26, 26, 0xff00ff)
-
-  const dudeBody = this.add.sprite(128 + 16, 128 + 16, "dude");
-  dudeBody.setScale(32 / 48, 32 / 48);
   let players = [
-    new Character(dudeBody, 200, this),
-    new Character(manBody, 200, this),
-    new Character(manBody2, 200, this)
+    new Character("dude", 200, this, {x: 32 + 16, y: 32 + 16}),
+    new Character("dude", 200, this, {x: 32 * 2 + 16, y: 32 + 16}),
+    new Character("dude", 200, this, {x: 32 + 16, y: 32 * 2 + 16})
   ];
   let curPlayer = 0;
   let player = players[0];
