@@ -13,6 +13,4 @@ function getPhaserConfig(preload, create, update) {
   };
 }
 
-export default {
-  getPhaserConfig
-};
+export default { getPhaserConfig };

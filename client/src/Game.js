@@ -11,6 +11,10 @@ function preload() {
   this.load.image("tilesBackground", "assets/gridtiles.png");
   this.load.image("tiles", "assets/items.png");
   this.load.tilemapTiledJSON("map", "assets/tutorial.json");
+  this.load.spritesheet("dude", "assets/dude.png", {
+    frameWidth: 32,
+    frameHeight: 48
+  });
 }
 
 function create() {
@@ -27,8 +31,10 @@ function create() {
   // blockedLayer.setCollision([290, 276]);
   // console.log(blockedLayer.layer.data);
 
+  const dudeBody = this.add.sprite(128 + 16, 128 + 16, "dude");
+  dudeBody.setScale(32 / 48, 32 / 48);
   let players = [
-    this.add.rectangle(32 + 16, 32 + 16, 26, 26, 0x0000ff),
+    dudeBody,
     this.add.rectangle(64 + 16, 32 + 16, 26, 26, 0x00ffff),
     this.add.rectangle(32 + 16, 64 + 16, 26, 26, 0xff00ff)
   ];
