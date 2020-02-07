@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import React from "react";
 import config from "./config/config";
+import Character from "./characters/character.js"
 
 let player, cursors;
 const objectMap = [];
@@ -31,12 +32,15 @@ function create() {
   // blockedLayer.setCollision([290, 276]);
   // console.log(blockedLayer.layer.data);
 
+  const manBody = this.add.rectangle(64 + 16, 32 + 16, 26, 26, 0x00ffff)
+  const manBody2 = this.add.rectangle(32 + 16, 64 + 16, 26, 26, 0xff00ff)
+
   const dudeBody = this.add.sprite(128 + 16, 128 + 16, "dude");
   dudeBody.setScale(32 / 48, 32 / 48);
   let players = [
-    dudeBody,
-    this.add.rectangle(64 + 16, 32 + 16, 26, 26, 0x00ffff),
-    this.add.rectangle(32 + 16, 64 + 16, 26, 26, 0xff00ff)
+    new Character(dudeBody, 200, this),
+    new Character(manBody, 200, this),
+    new Character(manBody2, 200, this)
   ];
   let curPlayer = 0;
   let player = players[0];
@@ -70,72 +74,28 @@ function create() {
   cursors.up.on(
     "down",
     function() {
-      if (
-        (currentTween && currentTween.isPlaying()) ||
-        hasObstacle(player.x, player.y - 32)
-      ) {
-        return;
-      }
-
-      currentTween = this.tweens.add({
-        targets: player,
-        duration: tweenDuration,
-        y: player.y - 32
-      });
+      player.moveUp()
     },
     this
   );
   cursors.down.on(
     "down",
     function() {
-      if (
-        (currentTween && currentTween.isPlaying()) ||
-        hasObstacle(player.x, player.y + 32)
-      ) {
-        return;
-      }
-
-      currentTween = this.tweens.add({
-        targets: player,
-        duration: tweenDuration,
-        y: player.y + 32
-      });
+      player.moveDown()
     },
     this
   );
   cursors.left.on(
     "down",
     function() {
-      if (
-        (currentTween && currentTween.isPlaying()) ||
-        hasObstacle(player.x - 32, player.y)
-      ) {
-        return;
-      }
-
-      currentTween = this.tweens.add({
-        targets: player,
-        duration: tweenDuration,
-        x: player.x - 32
-      });
+      player.moveLeft()
     },
     this
   );
   cursors.right.on(
     "down",
     function() {
-      if (
-        (currentTween && currentTween.isPlaying()) ||
-        hasObstacle(player.x + 32, player.y)
-      ) {
-        return;
-      }
-
-      currentTween = this.tweens.add({
-        targets: player,
-        duration: tweenDuration,
-        x: player.x + 32
-      });
+      player.moveRight()
     },
     this
   );
