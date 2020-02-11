@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import React from "react";
 import config from "./config/config";
-import Character from "./characters/character.js"
+import Character from "./characters/character.js";
 
 let player, cursors;
 const objectMap = [];
@@ -33,9 +33,9 @@ function create() {
   // console.log(blockedLayer.layer.data);
 
   let players = [
-    new Character("dude", 300, this, {x: 32 + 16, y: 32 + 16}),
-    new Character("dude", 300, this, {x: 32 * 2 + 16, y: 32 + 16}),
-    new Character("dude", 300, this, {x: 32 + 16, y: 32 * 2 + 16})
+    new Character("dude", 300, this, { x: 32 + 16, y: 32 + 16 }),
+    new Character("dude", 300, this, { x: 32 * 2 + 16, y: 32 + 16 }),
+    new Character("dude", 300, this, { x: 32 + 16, y: 32 * 2 + 16 })
   ];
   let curPlayer = 0;
   let player = players[0];
@@ -66,34 +66,10 @@ function create() {
     },
     this
   );
-  cursors.up.on(
-    "down",
-    function() {
-      player.moveUp()
-    },
-    this
-  );
-  cursors.down.on(
-    "down",
-    function() {
-      player.moveDown()
-    },
-    this
-  );
-  cursors.left.on(
-    "down",
-    function() {
-      player.moveLeft()
-    },
-    this
-  );
-  cursors.right.on(
-    "down",
-    function() {
-      player.moveRight()
-    },
-    this
-  );
+  cursors.up.on("down", player.moveUp, this);
+  cursors.down.on("down", player.moveDown, this);
+  cursors.left.on("down", player.moveLeft, this);
+  cursors.right.on("down", player.moveRight, this);
 }
 
 function update() {}
