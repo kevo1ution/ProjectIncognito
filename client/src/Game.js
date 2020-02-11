@@ -33,9 +33,9 @@ function create() {
   // console.log(blockedLayer.layer.data);
 
   let players = [
-    new Character("dude", 200, this, {x: 32 + 16, y: 32 + 16}),
-    new Character("dude", 200, this, {x: 32 * 2 + 16, y: 32 + 16}),
-    new Character("dude", 200, this, {x: 32 + 16, y: 32 * 2 + 16})
+    new Character("dude", 300, this, {x: 32 + 16, y: 32 + 16}),
+    new Character("dude", 300, this, {x: 32 * 2 + 16, y: 32 + 16}),
+    new Character("dude", 300, this, {x: 32 + 16, y: 32 * 2 + 16})
   ];
   let curPlayer = 0;
   let player = players[0];

@@ -1,6 +1,8 @@
 class Character {
   constructor(spriteName, moveDuration, scene, startPos) {
     this.body = scene.add.sprite(startPos.x, startPos.y, spriteName);
+    this.currentTween = scene.tweens.add({duration:0, targets:this.body})
+    this.canPlayTween = true;
     this.moveDuration = moveDuration;
     this.scene = scene
     scene.anims.create({
@@ -34,7 +36,6 @@ class Character {
       repeat: -1,
     })
 
-    // console.log(animationTest.onComplete(()=> console.log('testsetset')))
     this.body.anims.play('idle', true)
     this.body.on("animationcomplete", (animation, frame) => {
       if(animation.key === "idle"){
@@ -46,40 +47,68 @@ class Character {
 
   // Abstract virtual functions for moving up, down, left, right
   async moveUp(map) {
-    this.body.anims.play('up', true)
+    if(!this.canPlayTween){
+      return
+    }
+    this.canPlayTween = false;
     const targetPos = {x: this.body.x, y: this.body.y - 32};
+    this.currentTween = this.scene.tweens.add({
+        targets:this.body,
+        duration: this.moveDuration,
+        y: targetPos.y,
+        onComplete: () => {this.canPlayTween = true}
+      })
+  this.body.anims.play('up', true)
 
-    //if(map.hasObstacle(targetPos)){
-      this.body.x=targetPos.x
-      this.body.y=targetPos.y
-  //  }
   }
   async moveDown(map) {
-    this.body.anims.play('down', true)
+    if(!this.canPlayTween){
+      return
+    }
+    this.canPlayTween = false;
+
     const targetPos = {x: this.body.x, y: this.body.y + 32};
 
-  //  if(map.hasObstacle(targetPos)){
-      this.body.x=targetPos.x
-      this.body.y=targetPos.y
-    //}
+  this.currentTween = this.scene.tweens.add({
+        targets:this.body,
+        duration:this.moveDuration,
+        y: targetPos.y,
+        onComplete: () => {this.canPlayTween = true}
+      })
+    this.body.anims.play('down', true)
+
   }
   async moveLeft(map) {
-    this.body.anims.play('left', true)
+    if(!this.canPlayTween){
+      return
+    }
+    this.canPlayTween = false;
     const targetPos = {x: this.body.x - 32, y: this.body.y};
 
-    //if(map.hasObstacle(targetPos)){
-      this.body.x=targetPos.x
-      this.body.y=targetPos.y
-  //  }
+      this.currentTween = this.scene.tweens.add({
+        targets:this.body,
+        duration:this.moveDuration,
+        x: targetPos.x,
+        onComplete: () => {this.canPlayTween = true}
+      })
+      this.body.anims.play('left', true)
+
   }
   async moveRight(map) {
-    this.body.anims.play('right', true)
+    if(!this.canPlayTween){
+      return
+    }
+    this.canPlayTween = false;
     const targetPos = {x: this.body.x + 32, y: this.body.y};
 
-      // if(map.hasObstacle(targetPos)){
-           this.body.x=targetPos.x
-           this.body.y=targetPos.y
-      // }}
+      this.currentTween = this.scene.tweens.add({
+        targets:this.body,
+        duration:this.moveDuration,
+        x: targetPos.x,
+        onComplete: () => {this.canPlayTween = true}
+      })
+      this.body.anims.play('right', true)
+
     }
 }
 
