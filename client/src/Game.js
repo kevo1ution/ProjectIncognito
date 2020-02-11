@@ -66,10 +66,10 @@ function create() {
     },
     this
   );
-  cursors.up.on("down", player.moveUp, this);
-  cursors.down.on("down", player.moveDown, this);
-  cursors.left.on("down", player.moveLeft, this);
-  cursors.right.on("down", player.moveRight, this);
+  cursors.up.on("down", () => player.moveUp(), this);
+  cursors.down.on("down", () => player.moveDown(), this);
+  cursors.left.on("down", () => player.moveLeft(), this);
+  cursors.right.on("down", () => player.moveRight(), this);
 }
 
 function update() {}
