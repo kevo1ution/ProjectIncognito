@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 import React from "react";
 import config from "./config/config";
-import Character from "./characters/character.js";
 import Map from "./maps/map";
+import CharacterManager from "./characters/characterManager";
 
 const game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
 
@@ -18,32 +18,14 @@ function preload() {
 
 function create() {
   const map = new Map("map", this);
-
-  // set collision
-  // blockedLayer.setCollisionByProperty({ collides: true });
-  // console.log(blockedLayer.getTileAt(3, 7));
-  // blockedLayer.setCollision([290, 276]);
-  // console.log(blockedLayer.layer.data);
-
-  const players = [
-    new Character("dude", 300, this, { x: 32 + 16, y: 32 + 16 }),
-    new Character("dude", 300, this, { x: 32 * 2 + 16, y: 32 + 16 }),
-    new Character("dude", 300, this, { x: 32 + 16, y: 32 * 2 + 16 })
-  ];
-  let curPlayer = 0;
-  let player = players[0];
+  const characterManager = new CharacterManager(this);
   const cursors = this.input.keyboard.createCursorKeys();
 
-  function toggleCharacter() {
-    curPlayer++;
-    curPlayer = curPlayer % 3;
-    player = players[curPlayer];
-  }
-  cursors.space.on("down", toggleCharacter, this);
-  cursors.up.on("down", () => player.moveUp(), this);
-  cursors.down.on("down", () => player.moveDown(), this);
-  cursors.left.on("down", () => player.moveLeft(), this);
-  cursors.right.on("down", () => player.moveRight(), this);
+  cursors.space.on("down", () => characterManager.toggleCharacter(), this);
+  cursors.up.on("down", () => characterManager.getCurrentCharacter().moveUp(map), this);
+  cursors.down.on("down", () => characterManager.getCurrentCharacter().moveDown(map), this);
+  cursors.left.on("down", () => characterManager.getCurrentCharacter().moveLeft(map), this);
+  cursors.right.on("down", () => characterManager.getCurrentCharacter().moveRight(map), this);
 }
 
 function update() {}
