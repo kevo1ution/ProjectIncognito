@@ -22,10 +22,26 @@ function create() {
   const cursors = this.input.keyboard.createCursorKeys();
 
   cursors.space.on("down", () => characterManager.toggleCharacter(), this);
-  cursors.up.on("down", () => characterManager.getCurrentCharacter().moveUp(map), this);
-  cursors.down.on("down", () => characterManager.getCurrentCharacter().moveDown(map), this);
-  cursors.left.on("down", () => characterManager.getCurrentCharacter().moveLeft(map), this);
-  cursors.right.on("down", () => characterManager.getCurrentCharacter().moveRight(map), this);
+  cursors.up.on(
+    "down",
+    () => characterManager.getCurrentCharacter().moveUp(map),
+    this
+  );
+  cursors.down.on(
+    "down",
+    () => characterManager.getCurrentCharacter().moveDown(map),
+    this
+  );
+  cursors.left.on(
+    "down",
+    () => characterManager.getCurrentCharacter().moveLeft(map),
+    this
+  );
+  cursors.right.on(
+    "down",
+    () => characterManager.getCurrentCharacter().moveRight(map),
+    this
+  );
 }
 
 function update() {}
