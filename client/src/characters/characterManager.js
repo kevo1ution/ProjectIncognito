@@ -1,11 +1,13 @@
-import Character from "./character.js";
+import Demolisher from "./demolisher";
+import Recon from "./recon";
+import Scout from "./scout";
 
 class CharacterManager {
   constructor(scene) {
     this.characters = [
-      new Character("dude", 300, scene, { x: 32 + 16, y: 32 + 16 }, this),
-      new Character("dude", 300, scene, { x: 32 * 2 + 16, y: 32 + 16 }, this),
-      new Character("dude", 300, scene, { x: 32 + 16, y: 32 * 2 + 16 }, this)
+      new Demolisher("dude", 300, scene, { x: 32 + 16, y: 32 + 16 }, this),
+      new Recon("dude", 300, scene, { x: 32 * 2 + 16, y: 32 + 16 }, this),
+      new Scout("dude", 300, scene, { x: 32 + 16, y: 32 * 2 + 16 }, this)
     ];
     this.curCharIndex = 0;
     this.curChar = this.characters[0];
