@@ -1,5 +1,6 @@
 class Character {
-  constructor(spriteName, moveDuration, scene, startPos) {
+  constructor(spriteName, moveDuration, scene, startPos, characterManager) {
+    this.characterManager = characterManager;
     this.body = scene.add.sprite(startPos.x, startPos.y, spriteName);
     this.currentTween = scene.tweens.add({ duration: 0, targets: this.body });
     this.canPlayTween = true;
@@ -41,7 +42,7 @@ class Character {
       frameRate: 4000 / moveDuration
     });
 
-    const animationTest = scene.anims.create({
+    scene.anims.create({
       key: "idle",
       frames: [{ key: "dude", frame: 4 }],
       frameRate: 4000,
@@ -63,11 +64,12 @@ class Character {
 
   // Abstract virtual functions for moving up, down, left, right
   async moveUp(map) {
-    if (!this.canPlayTween) {
+    const targetPos = { x: this.body.x, y: this.body.y - 32 };
+    if (!this.canPlayTween || !this.canMove(map, targetPos)) {
       return;
     }
+
     this.canPlayTween = false;
-    const targetPos = { x: this.body.x, y: this.body.y - 32 };
     this.currentTween = this.scene.tweens.add({
       targets: this.body,
       duration: this.moveDuration,
@@ -79,13 +81,13 @@ class Character {
     this.body.anims.play("up", true);
   }
   async moveDown(map) {
-    if (!this.canPlayTween) {
-      return;
-    }
-    this.canPlayTween = false;
-
     const targetPos = { x: this.body.x, y: this.body.y + 32 };
 
+    if (!this.canPlayTween || !this.canMove(map, targetPos)) {
+      return;
+    }
+
+    this.canPlayTween = false;
     this.currentTween = this.scene.tweens.add({
       targets: this.body,
       duration: this.moveDuration,
@@ -97,12 +99,13 @@ class Character {
     this.body.anims.play("down", true);
   }
   async moveLeft(map) {
-    if (!this.canPlayTween) {
-      return;
-    }
-    this.canPlayTween = false;
     const targetPos = { x: this.body.x - 32, y: this.body.y };
 
+    if (!this.canPlayTween || !this.canMove(map, targetPos)) {
+      return;
+    }
+
+    this.canPlayTween = false;
     this.currentTween = this.scene.tweens.add({
       targets: this.body,
       duration: this.moveDuration,
@@ -114,12 +117,12 @@ class Character {
     this.body.anims.play("left", true);
   }
   async moveRight(map) {
-    if (!this.canPlayTween) {
+    const targetPos = { x: this.body.x + 32, y: this.body.y };
+    if (!this.canPlayTween || !this.canMove(map, targetPos)) {
       return;
     }
-    this.canPlayTween = false;
-    const targetPos = { x: this.body.x + 32, y: this.body.y };
 
+    this.canPlayTween = false;
     this.currentTween = this.scene.tweens.add({
       targets: this.body,
       duration: this.moveDuration,
@@ -129,6 +132,16 @@ class Character {
       }
     });
     this.body.anims.play("right", true);
+  }
+
+  canMove(map, targetPos) {
+    const tile = map.getBlockingTile(targetPos);
+    const otherChar = this.characterManager.getCharacterWorldXY(targetPos);
+    if (otherChar || tile) {
+      return false;
+    }
+
+    return true;
   }
 }
 
