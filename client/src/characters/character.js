@@ -41,7 +41,7 @@ class Character {
       frameRate: 4000 / moveDuration
     });
 
-    const animationTest = scene.anims.create({
+    scene.anims.create({
       key: "idle",
       frames: [{ key: "dude", frame: 4 }],
       frameRate: 4000,

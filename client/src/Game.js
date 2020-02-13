@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import React from "react";
 import config from "./config/config";
 import Character from "./characters/character.js";
-import Map from "./maps/map"
+import Map from "./maps/map";
 
 const game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
 
@@ -34,15 +34,12 @@ function create() {
   let player = players[0];
   const cursors = this.input.keyboard.createCursorKeys();
 
-  cursors.space.on(
-    "down",
-    function() {
-      curPlayer++;
-      curPlayer = curPlayer % 3;
-      player = players[curPlayer];
-    },
-    this
-  );
+  function toggleCharacter() {
+    curPlayer++;
+    curPlayer = curPlayer % 3;
+    player = players[curPlayer];
+  }
+  cursors.space.on("down", toggleCharacter, this);
   cursors.up.on("down", () => player.moveUp(), this);
   cursors.down.on("down", () => player.moveDown(), this);
   cursors.left.on("down", () => player.moveLeft(), this);
