@@ -1,3 +1,5 @@
+import Phaser from "phaser";
+
 class Character {
   constructor(spriteName, moveDuration, scene, startPos, characterManager) {
     this.characterManager = characterManager;
@@ -6,6 +8,15 @@ class Character {
     this.canPlayTween = true;
     this.moveDuration = moveDuration;
     this.scene = scene;
+
+    this.particles = scene.add.particles("cloud");
+
+    this.emitter = this.particles.createEmitter();
+    this.emitter.pause();
+    this.emitter.setSpeed(50);
+    this.emitter.setBlendMode(Phaser.BlendModes.ADD);
+    this.emitter.startFollow(this.body);
+
 
     this.sounds = {
       run: scene.sound.add(spriteName + "run")
@@ -61,6 +72,8 @@ class Character {
         if (animation.key === "idle") {
           return;
         }
+
+        this.emitter.pause();
         this.sounds.run.stop();
         this.body.anims.play("idle", true);
       },
@@ -69,6 +82,8 @@ class Character {
   }
 
   async move(targetPos) {
+    this.emitter.start()
+
     this.sounds.run.play();
     this.canPlayTween = false;
     this.currentTween = this.scene.tweens.add({

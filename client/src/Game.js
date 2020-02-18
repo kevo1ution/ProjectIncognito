@@ -16,6 +16,7 @@ function preload() {
   });
 
   this.load.audio("duderun", "assets/run.wav");
+  this.load.image("cloud", "assets/cloud.png");
 }
 
 function create() {
