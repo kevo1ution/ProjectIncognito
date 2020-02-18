@@ -14,6 +14,8 @@ function preload() {
     frameWidth: 32,
     frameHeight: 48
   });
+
+  this.load.audio("duderun", "assets/run.wav");
 }
 
 function create() {

@@ -6,6 +6,11 @@ class Character {
     this.canPlayTween = true;
     this.moveDuration = moveDuration;
     this.scene = scene;
+
+    this.sounds = {
+      run: scene.sound.add(spriteName + "run")
+    };
+
     scene.anims.create({
       key: "left",
       frames: scene.anims.generateFrameNumbers(spriteName, {
@@ -56,10 +61,24 @@ class Character {
         if (animation.key === "idle") {
           return;
         }
+        this.sounds.run.stop();
         this.body.anims.play("idle", true);
       },
       scene
     );
+  }
+
+  async move(targetPos) {
+    this.sounds.run.play();
+    this.canPlayTween = false;
+    this.currentTween = this.scene.tweens.add({
+      ...targetPos,
+      targets: this.body,
+      duration: this.moveDuration,
+      onComplete: () => {
+        this.canPlayTween = true;
+      }
+    });
   }
 
   // Abstract virtual functions for moving up, down, left, right
@@ -69,15 +88,7 @@ class Character {
       return;
     }
 
-    this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      targets: this.body,
-      duration: this.moveDuration,
-      y: targetPos.y,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
-    });
+    this.move(targetPos);
     this.body.anims.play("up", true);
   }
   async moveDown(map) {
@@ -87,15 +98,7 @@ class Character {
       return;
     }
 
-    this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      targets: this.body,
-      duration: this.moveDuration,
-      y: targetPos.y,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
-    });
+    this.move(targetPos);
     this.body.anims.play("down", true);
   }
   async moveLeft(map) {
@@ -105,15 +108,7 @@ class Character {
       return;
     }
 
-    this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      targets: this.body,
-      duration: this.moveDuration,
-      x: targetPos.x,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
-    });
+    this.move(targetPos);
     this.body.anims.play("left", true);
   }
   async moveRight(map) {
@@ -122,15 +117,7 @@ class Character {
       return;
     }
 
-    this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      targets: this.body,
-      duration: this.moveDuration,
-      x: targetPos.x,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
-    });
+    this.move(targetPos);
     this.body.anims.play("right", true);
   }
 
