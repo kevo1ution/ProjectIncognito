@@ -9,13 +9,15 @@ class Character {
     this.moveDuration = moveDuration;
     this.scene = scene;
 
+    this.body.setDepth(100)
     this.particles = scene.add.particles("cloud");
 
-    this.emitter = this.particles.createEmitter();
+    this.emitter = this.particles.createEmitter({
+      scale: 0.05,
+      lifespan: moveDuration,
+    });
     this.emitter.pause();
-    this.emitter.setSpeed(50);
-    this.emitter.setBlendMode(Phaser.BlendModes.ADD);
-    this.emitter.startFollow(this.body);
+    //this.emitter.startFollow(this.body);
 
     this.sounds = {
       run: scene.sound.add(spriteName + "run")
@@ -76,7 +78,7 @@ class Character {
           return;
         }
 
-        this.emitter.pause();
+        //this.emitter.pause();
         this.sounds.run.stop();
         this.body.anims.play("idle", true);
       },
@@ -85,7 +87,18 @@ class Character {
   }
 
   async move(targetPos) {
-    this.emitter.start()
+    //this.emitter.start()
+    const cloud = this.scene.add.image(this.body.x, this.body.y, "cloud")
+    cloud.setScale(0.05, 0.05)
+    cloud.setDepth(0);
+    this.scene.tweens.add({
+      alpha: 0,
+      targets: cloud,
+      duration: this.moveDuration,
+      onComplete: ()=>{
+      },
+    })
+
 
     this.sounds.run.play();
     this.canPlayTween = false;
