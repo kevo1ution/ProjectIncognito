@@ -7,7 +7,7 @@ class CharacterManager {
     this.characters = [
       new Demolisher("dude", 300, scene, { x: 32 + 16, y: 32 + 16 }, this),
       new Recon("dude", 300, scene, { x: 32 * 2 + 16, y: 32 + 16 }, this),
-      new Scout("man", 600, scene, { x: 32 + 16, y: 32 * 2 + 16 }, this)
+      new Scout("man", 500, scene, { x: 32 + 16, y: 32 * 2 + 16 }, this)
     ];
     this.curCharIndex = 0;
     this.curChar = this.characters[0];
