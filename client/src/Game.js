@@ -10,12 +10,12 @@ function preload() {
   this.load.image("tilesBackground", "assets/gridtiles.png");
   this.load.image("tiles", "assets/items.png");
   this.load.tilemapTiledJSON("map", "assets/tutorial.json");
-  this.load.spritesheet("dude", "assets/dude.png", {
-    frameWidth: 32,
-    frameHeight: 48
+  this.load.spritesheet("demolisher", "assets/demolisher.png", {
+    frameWidth: 26.67,
+    frameHeight: 32
   });
 
-  this.load.audio("duderun", "assets/run.wav");
+  this.load.audio("demolisherrun", "assets/run.wav");
   this.load.image("cloud", "assets/cloud.png");
 }
 

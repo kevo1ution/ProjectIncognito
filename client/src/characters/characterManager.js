@@ -5,9 +5,9 @@ import Scout from "./scout";
 class CharacterManager {
   constructor(scene) {
     this.characters = [
-      new Demolisher("dude", 300, scene, { x: 32 + 16, y: 32 + 16 }, this),
-      new Recon("dude", 300, scene, { x: 32 * 2 + 16, y: 32 + 16 }, this),
-      new Scout("dude", 300, scene, { x: 32 + 16, y: 32 * 2 + 16 }, this)
+      new Demolisher("demolisher", 300, scene, { x: 32 + 16, y: 32 + 16 }, this),
+      new Recon("demolisher", 300, scene, { x: 32 * 2 + 16, y: 32 + 16 }, this),
+      new Scout("demolisher", 300, scene, { x: 32 + 16, y: 32 * 2 + 16 }, this)
     ];
     this.curCharIndex = 0;
     this.curChar = this.characters[0];

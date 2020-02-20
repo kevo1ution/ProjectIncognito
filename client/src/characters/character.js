@@ -17,50 +17,53 @@ class Character {
     this.emitter.setBlendMode(Phaser.BlendModes.ADD);
     this.emitter.startFollow(this.body);
 
-
     this.sounds = {
       run: scene.sound.add(spriteName + "run")
     };
 
     scene.anims.create({
       key: "left",
-      frames: scene.anims.generateFrameNumbers(spriteName, {
-        start: 0,
-        end: 3
-      }),
-      frameRate: 4000 / moveDuration
+      frames: [
+        { key: spriteName, frame: 6 },
+        { key: spriteName, frame: 7 }
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1
     });
 
     scene.anims.create({
       key: "right",
-      frames: scene.anims.generateFrameNumbers(spriteName, {
-        start: 5,
-        end: 8
-      }),
-      frameRate: 4000 / moveDuration
+      frames: [
+        { key: spriteName, frame: 8 },
+        { key: spriteName, frame: 9 }
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1
     });
 
     scene.anims.create({
       key: "up",
-      frames: scene.anims.generateFrameNumbers(spriteName, {
-        start: 0,
-        end: 3
-      }),
-      frameRate: 4000 / moveDuration
+      frames: [
+        { key: spriteName, frame: 4 },
+        { key: spriteName, frame: 5 }
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1
     });
 
     scene.anims.create({
       key: "down",
-      frames: scene.anims.generateFrameNumbers(spriteName, {
-        start: 5,
-        end: 8
-      }),
-      frameRate: 4000 / moveDuration
+      frames: [
+        { key: spriteName, frame: 10 },
+        { key: spriteName, frame: 11 },
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1
     });
 
     scene.anims.create({
       key: "idle",
-      frames: [{ key: "dude", frame: 4 }],
+      frames: [{ key: spriteName, frame: 0 }],
       frameRate: 4000,
       repeat: -1
     });
