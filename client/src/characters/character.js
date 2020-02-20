@@ -9,12 +9,12 @@ class Character {
     this.moveDuration = moveDuration;
     this.scene = scene;
 
-    this.body.setDepth(100)
+    this.body.setDepth(100);
     this.particles = scene.add.particles("cloud");
 
     this.emitter = this.particles.createEmitter({
       scale: 0.05,
-      lifespan: moveDuration,
+      lifespan: moveDuration
     });
     this.emitter.pause();
     //this.emitter.startFollow(this.body);
@@ -57,7 +57,7 @@ class Character {
       key: "down",
       frames: [
         { key: spriteName, frame: 10 },
-        { key: spriteName, frame: 11 },
+        { key: spriteName, frame: 11 }
       ],
       frameRate: 4000 / moveDuration,
       repeat: 1
@@ -86,19 +86,31 @@ class Character {
     );
   }
 
-  async move(targetPos) {
+  async move(targetPos, dir) {
     //this.emitter.start()
-    const cloud = this.scene.add.image(this.body.x, this.body.y, "cloud")
-    cloud.setScale(0.05, 0.05)
+    const cloud = this.scene.add.image(this.body.x, this.body.y, "cloud");
+    switch (dir) {
+      case "up":
+        cloud.setAngle(-90);
+        break;
+      case "left":
+        cloud.setAngle(-180);
+        break;
+      case "right":
+        break;
+      case "down":
+        cloud.setAngle(90);
+        break;
+    }
+
+    cloud.setScale(0.03, 0.03);
     cloud.setDepth(0);
     this.scene.tweens.add({
       alpha: 0,
       targets: cloud,
-      duration: this.moveDuration,
-      onComplete: ()=>{
-      },
-    })
-
+      duration: this.moveDuration * 4,
+      onComplete: () => {}
+    });
 
     this.sounds.run.play();
     this.canPlayTween = false;
@@ -119,7 +131,7 @@ class Character {
       return;
     }
 
-    this.move(targetPos);
+    this.move(targetPos, "up");
     this.body.anims.play("up", true);
   }
   async moveDown(map) {
@@ -129,7 +141,7 @@ class Character {
       return;
     }
 
-    this.move(targetPos);
+    this.move(targetPos, "down");
     this.body.anims.play("down", true);
   }
   async moveLeft(map) {
@@ -139,7 +151,7 @@ class Character {
       return;
     }
 
-    this.move(targetPos);
+    this.move(targetPos, "left");
     this.body.anims.play("left", true);
   }
   async moveRight(map) {
@@ -148,7 +160,7 @@ class Character {
       return;
     }
 
-    this.move(targetPos);
+    this.move(targetPos, "right");
     this.body.anims.play("right", true);
   }
 

@@ -16,7 +16,7 @@ function preload() {
   });
 
   this.load.audio("demolisherrun", "assets/run.wav");
-  this.load.image("cloud", "assets/cloud.png");
+  this.load.image("cloud", "assets/footsteps.png");
 }
 
 function create() {
