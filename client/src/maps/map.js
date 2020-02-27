@@ -16,10 +16,27 @@ class Map {
       "blockedLayer",
       this.tileset
     );
+    this.guardLayer = this.map.createDynamicLayer("guardLayer", this.tileset);
+    this.lightLayer = this.map.createDynamicLayer("lightLayer", this.tileset);
+
+    this.guardMap = {}
+
+    this.lightLayer.alpha = 0.2
+  }
+
+  isGuardedTile(targetPos) {
+    return this.lightLayer.getTileAtWorldXY(targetPos.x, targetPos.y)
+  }
+
+  rotateGuard(){
+    
   }
 
   getBlockingTile(targetPos) {
-    return this.blockedLayer.getTileAtWorldXY(targetPos.x, targetPos.y);
+    return (
+      this.blockedLayer.getTileAtWorldXY(targetPos.x, targetPos.y) ||
+      this.guardLayer.getTileAtWorldXY(targetPos.x, targetPos.y)
+    );
   }
 
   isMoveable(tile) {

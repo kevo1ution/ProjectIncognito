@@ -8,7 +8,6 @@ const game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
 
 function preload() {
   this.load.image("tilesBackground", "assets/gridtiles.png");
-  this.load.image("tiles", "assets/items.png");
   this.load.tilemapTiledJSON("map", "assets/tutorial.json");
   this.load.spritesheet("dude", "assets/dude.png", {
     frameWidth: 32,
