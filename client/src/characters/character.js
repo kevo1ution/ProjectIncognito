@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import config from "../config/config";
 
 class Character {
   constructor(spriteName, moveDuration, scene, startPos, characterManager) {
@@ -8,16 +9,7 @@ class Character {
     this.canPlayTween = true;
     this.moveDuration = moveDuration;
     this.scene = scene;
-
-    this.body.setDepth(100);
-    this.particles = scene.add.particles("cloud");
-
-    this.emitter = this.particles.createEmitter({
-      scale: 0.05,
-      lifespan: moveDuration
-    });
-    this.emitter.pause();
-    //this.emitter.startFollow(this.body);
+    this.body.setDepth(config.GAME.sprite.depth);
 
     this.sounds = {
       run: scene.sound.add(spriteName + "run")
@@ -78,7 +70,6 @@ class Character {
           return;
         }
 
-        //this.emitter.pause();
         this.sounds.run.stop();
         this.body.anims.play("idle", true);
       },
@@ -87,29 +78,32 @@ class Character {
   }
 
   async move(targetPos, dir) {
-    //this.emitter.start()
-    const cloud = this.scene.add.image(this.body.x, this.body.y, "cloud");
+    const footsteps = this.scene.add.image(
+      this.body.x,
+      this.body.y,
+      "footsteps"
+    );
     switch (dir) {
       case "up":
-        cloud.setAngle(-90);
+        footsteps.setAngle(-90);
         break;
       case "left":
-        cloud.setAngle(-180);
-        break;
-      case "right":
+        footsteps.setAngle(-180);
         break;
       case "down":
-        cloud.setAngle(90);
+        footsteps.setAngle(90);
         break;
     }
 
-    cloud.setScale(0.03, 0.03);
-    cloud.setDepth(0);
+    footsteps.setScale(0.03, 0.03);
+    footsteps.setDepth(0);
     this.scene.tweens.add({
       alpha: 0,
-      targets: cloud,
+      targets: footsteps,
       duration: this.moveDuration * 4,
-      onComplete: () => {}
+      onComplete: () => {
+        footsteps.destroy();
+      }
     });
 
     this.sounds.run.play();
