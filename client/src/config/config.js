@@ -13,6 +13,12 @@ const GAME = {
     depth: 100 // render ordering for sprites
   },
   characters: {
+    move: {
+      RIGHT: 1,
+      DOWN: 2,
+      LEFT: 3,
+      UP: 4
+    },
     scout: {
       guardAndTowerRotation: Math.PI / 2
     }
@@ -36,4 +42,4 @@ function getPhaserConfig(preload, create, update) {
   };
 }
 
-export default { getPhaserConfig, GAME };
+export default { getPhaserConfig, GAME: Object.freeze(GAME) };
