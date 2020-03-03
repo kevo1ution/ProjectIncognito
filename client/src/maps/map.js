@@ -138,16 +138,16 @@ class Map {
     const nextPos = { ...posWorld };
 
     switch (direction) {
-      case "right":
+      case config.GAME.characters.move.RIGHT:
         nextPos.x += config.GAME.tileSize.x;
         break;
-      case "down":
+      case config.GAME.characters.move.DOWN:
         nextPos.y += config.GAME.tileSize.y;
         break;
-      case "left":
+      case config.GAME.characters.move.LEFT:
         nextPos.x -= config.GAME.tileSize.x;
         break;
-      case "up":
+      case config.GAME.characters.move.UP:
         nextPos.y -= config.GAME.tileSize.y;
         break;
       default:
@@ -164,16 +164,16 @@ class Map {
 
     let diff;
     switch (direction) {
-      case "right":
+      case config.GAME.characters.move.RIGHT:
         diff = { x: 1, y: 0 };
         break;
-      case "down":
+      case config.GAME.characters.move.DOWN:
         diff = { x: 0, y: 1 };
         break;
-      case "left":
+      case config.GAME.characters.move.LEFT:
         diff = { x: -1, y: 0 };
         break;
-      case "up":
+      case config.GAME.characters.move.UP:
         diff = { x: 0, y: -1 };
         break;
       default:

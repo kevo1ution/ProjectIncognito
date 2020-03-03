@@ -77,26 +77,42 @@ class Character {
     );
   }
 
-  async move(targetPos, dir, map) {
+  async move(map, dir) {
+    let angle = 0;
+    const targetPos = { x: this.body.x, y: this.body.y };
+    switch (dir) {
+      case config.GAME.characters.move.UP:
+        angle = -90;
+        targetPos.y -= config.GAME.tileSize.y;
+        break;
+      case config.GAME.characters.move.LEFT:
+        angle = -180;
+        targetPos.x -= config.GAME.tileSize.x;
+        break;
+      case config.GAME.characters.move.DOWN:
+        angle = 90;
+        targetPos.y += config.GAME.tileSize.y;
+        break;
+      case config.GAME.characters.move.RIGHT:
+        targetPos.x += config.GAME.tileSize.x;
+        break;
+      default:
+        throw new Error("Invalid Direction!");
+    }
+
+    if (!this.canPlayTween || !this.canMove(map, targetPos, dir)) {
+      return;
+    }
+
     const footsteps = this.scene.add.image(
       this.body.x,
       this.body.y,
       "footsteps"
     );
-    switch (dir) {
-      case "up":
-        footsteps.setAngle(-90);
-        break;
-      case "left":
-        footsteps.setAngle(-180);
-        break;
-      case "down":
-        footsteps.setAngle(90);
-        break;
-    }
-
+    footsteps.setAngle(angle);
     footsteps.setScale(0.03, 0.03);
     footsteps.setDepth(0);
+
     this.scene.tweens.add({
       alpha: 0,
       targets: footsteps,
@@ -105,7 +121,7 @@ class Character {
         footsteps.destroy();
       }
     });
-
+    this.body.anims.play("up", true);
     this.sounds.run.play();
     this.canPlayTween = false;
     this.currentTween = this.scene.tweens.add({
@@ -116,46 +132,6 @@ class Character {
         this.canPlayTween = true;
       }
     });
-  }
-
-  // Abstract virtual functions for moving up, down, left, right
-  async moveUp(map) {
-    const targetPos = { x: this.body.x, y: this.body.y - 32 };
-    if (!this.canPlayTween || !this.canMove(map, targetPos, "up")) {
-      return;
-    }
-
-    this.move(targetPos, "up", map);
-    this.body.anims.play("up", true);
-  }
-  async moveDown(map) {
-    const targetPos = { x: this.body.x, y: this.body.y + 32 };
-
-    if (!this.canPlayTween || !this.canMove(map, targetPos, "down")) {
-      return;
-    }
-
-    this.move(targetPos, "down", map);
-    this.body.anims.play("down", true);
-  }
-  async moveLeft(map) {
-    const targetPos = { x: this.body.x - 32, y: this.body.y };
-
-    if (!this.canPlayTween || !this.canMove(map, targetPos, "left")) {
-      return;
-    }
-
-    this.move(targetPos, "left", map);
-    this.body.anims.play("left", true);
-  }
-  async moveRight(map) {
-    const targetPos = { x: this.body.x + 32, y: this.body.y };
-    if (!this.canPlayTween || !this.canMove(map, targetPos, "right")) {
-      return;
-    }
-
-    this.move(targetPos, "right", map);
-    this.body.anims.play("right", true);
   }
 
   canMove(map, targetPos, dir) {

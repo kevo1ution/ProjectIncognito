@@ -26,20 +26,28 @@ function create() {
     characterManager.toggleCharacter();
   });
   this.input.keyboard.on("keydown-W", function(event) {
-    characterManager.getCurrentCharacter().moveUp(map);
+    characterManager
+      .getCurrentCharacter()
+      .move(map, config.GAME.characters.move.UP);
   });
   this.input.keyboard.on("keydown-A", function(event) {
-    characterManager.getCurrentCharacter().moveLeft(map);
+    characterManager
+      .getCurrentCharacter()
+      .move(map, config.GAME.characters.move.LEFT);
   });
   this.input.keyboard.on("keydown-S", function(event) {
-    characterManager.getCurrentCharacter().moveDown(map);
+    characterManager
+      .getCurrentCharacter()
+      .move(map, config.GAME.characters.move.DOWN);
   });
   this.input.keyboard.on("keydown-D", function(event) {
-    characterManager.getCurrentCharacter().moveRight(map);
+    characterManager
+      .getCurrentCharacter()
+      .move(map, config.GAME.characters.move.RIGHT);
   });
   this.input.keyboard.on("keydown-F", function(event) {
     characterManager.getCurrentCharacter().ability(map);
-  });  
+  });
 }
 
 function update() {}
