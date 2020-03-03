@@ -21,29 +21,25 @@ function preload() {
 function create() {
   const map = new Map("map", this);
   const characterManager = new CharacterManager(this);
-  const cursors = this.input.keyboard.createCursorKeys();
 
-  cursors.space.on("down", () => characterManager.toggleCharacter(), this);
-  cursors.up.on(
-    "down",
-    () => characterManager.getCurrentCharacter().moveUp(map),
-    this
-  );
-  cursors.down.on(
-    "down",
-    () => characterManager.getCurrentCharacter().moveDown(map),
-    this
-  );
-  cursors.left.on(
-    "down",
-    () => characterManager.getCurrentCharacter().moveLeft(map),
-    this
-  );
-  cursors.right.on(
-    "down",
-    () => characterManager.getCurrentCharacter().moveRight(map),
-    this
-  );
+  this.input.keyboard.on("keydown-SPACE", function(event) {
+    characterManager.toggleCharacter();
+  });
+  this.input.keyboard.on("keydown-W", function(event) {
+    characterManager.getCurrentCharacter().moveUp(map);
+  });
+  this.input.keyboard.on("keydown-A", function(event) {
+    characterManager.getCurrentCharacter().moveLeft(map);
+  });
+  this.input.keyboard.on("keydown-S", function(event) {
+    characterManager.getCurrentCharacter().moveDown(map);
+  });
+  this.input.keyboard.on("keydown-D", function(event) {
+    characterManager.getCurrentCharacter().moveRight(map);
+  });
+  this.input.keyboard.on("keydown-F", function(event) {
+    characterManager.getCurrentCharacter().ability(map);
+  });  
 }
 
 function update() {}
@@ -53,38 +49,3 @@ function Game() {
 }
 
 export default Game;
-
-/**
- * Rough draft of code
- * currentCharacter = //enum.demolisioner, enum.recon, enum.scout, enum.null
- * characters = {demolisioner, recon, scout}
- * currentLevel = 0 - maxLevel
- * preload(){
- *  //load all of the images and map
- * }
- *
- * create(){
- *  loadUI() //load ui of the game
- *
- *  //setup controls
- * }
- *
- * update(){
- *
- *  //keyboard events
- *  if(currentCharacter !== enum.null){
- *    if(w is pressed){
- *      characters[currentCharacter].moveUp()
- *    }
- *    if(a,s,d is pressed)... etc.
- *    if(space pressed) toggleCharacter();
- *  }
- * }
- *
- *
- * characters <- demolisher, recon, scout
- * character{
- *  position {x, y}
- *  sprite
- * }
- */

@@ -167,6 +167,8 @@ class Character {
 
     return true;
   }
+
+  ability(map) {}
 }
 
 export default Character;
