@@ -21,7 +21,31 @@ class Map {
 
     this.setupLightLayer();
 
-    this.lightUp.bind(this);
+    this.lightUp = this.lightUp.bind(this);
+    this.setupLightLayer = this.setupLightLayer.bind(this);
+    this.rotateGuardOrTower = this.rotateGuardOrTower.bind(this);
+
+    setInterval(() => {
+      const guardTiles = this.layers.guard.filterTiles(tile => {
+        return tile.index === config.GAME.tileIndex.guard;
+      });
+
+      const towerTiles = this.layers.guard.filterTiles(tile => {
+        return tile.index === config.GAME.tileIndex.tower;
+      });
+
+      guardTiles.forEach(tile => {
+        this.rotateGuardOrTower(
+          this.layers.guard.tileToWorldXY(tile.x, tile.y)
+        );
+      });
+
+      towerTiles.forEach(tile => {
+        this.rotateGuardOrTower(
+          this.layers.guard.tileToWorldXY(tile.x, tile.y)
+        );
+      });
+    }, 500);
   }
 
   lightUp(pos, dir, num, tileIndex) {
@@ -39,7 +63,7 @@ class Map {
         pos.x -= num;
         finalPos.x--;
         break;
-      case (Math.Pi * 3) / 2: // up
+      case (Math.PI * 3) / 2: // up
         pos.y -= num;
         finalPos.y--;
         break;
@@ -87,22 +111,42 @@ class Map {
     });
   }
 
-  isGuardedTile(pos) {
+  isGuardedTile(posWorld) {
     //iterate through the guards, and check if tile is within the range
   }
 
-  rotateGuard(pos) {
-    //delete all the tiles from the light layer and remake them
+  rotateGuardOrTower(posWorld) {
+    const guardOrTowerTile = this.layers.guard.getTileAtWorldXY(
+      posWorld.x,
+      posWorld.y
+    );
+    if (guardOrTowerTile === null) {
+      return;
+    }
+
+    if (guardOrTowerTile.index === config.GAME.tileIndex.guard) {
+      guardOrTowerTile.rotation +=
+        config.GAME.characters.scout.guardAndTowerRotation;
+      guardOrTowerTile.rotation %= Math.PI * 2;
+    } else if (guardOrTowerTile.index === config.GAME.tileIndex.tower) {
+      guardOrTowerTile.rotation +=
+        config.GAME.characters.scout.guardAndTowerRotation;
+      guardOrTowerTile.rotation %= Math.PI * 2;
+    } else {
+      throw Error("Invalid guard or tower tile index detected!");
+    }
+
+    this.setupLightLayer();
   }
 
-  getBlockingTile(pos) {
+  getBlockingTile(posWorld) {
     return (
-      this.layers.blocked.getTileAtWorldXY(pos.x, pos.y) ||
-      this.layers.guard.getTileAtWorldXY(pos.x, pos.y)
+      this.layers.blocked.getTileAtWorldXY(posWorld.x, posWorld.y) ||
+      this.layers.guard.getTileAtWorldXY(posWorld.x, posWorld.y)
     );
   }
 
-  isMoveable(pos, direction) {
+  isMoveable(posWorld, direction) {
     return false;
   }
 }

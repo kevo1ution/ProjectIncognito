@@ -12,6 +12,11 @@ const GAME = {
     size: { x: 80 / 3, y: 32 },
     depth: 100 // render ordering for sprites
   },
+  characters: {
+    scout: {
+      guardAndTowerRotation: Math.PI / 2
+    }
+  },
   obstacle: {
     guardSight: 2,
     towerSight: 5
