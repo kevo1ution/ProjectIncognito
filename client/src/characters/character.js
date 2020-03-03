@@ -77,7 +77,7 @@ class Character {
     );
   }
 
-  async move(targetPos, dir) {
+  async move(targetPos, dir, map) {
     const footsteps = this.scene.add.image(
       this.body.x,
       this.body.y,
@@ -121,44 +121,44 @@ class Character {
   // Abstract virtual functions for moving up, down, left, right
   async moveUp(map) {
     const targetPos = { x: this.body.x, y: this.body.y - 32 };
-    if (!this.canPlayTween || !this.canMove(map, targetPos)) {
+    if (!this.canPlayTween || !this.canMove(map, targetPos, "up")) {
       return;
     }
 
-    this.move(targetPos, "up");
+    this.move(targetPos, "up", map);
     this.body.anims.play("up", true);
   }
   async moveDown(map) {
     const targetPos = { x: this.body.x, y: this.body.y + 32 };
 
-    if (!this.canPlayTween || !this.canMove(map, targetPos)) {
+    if (!this.canPlayTween || !this.canMove(map, targetPos, "down")) {
       return;
     }
 
-    this.move(targetPos, "down");
+    this.move(targetPos, "down", map);
     this.body.anims.play("down", true);
   }
   async moveLeft(map) {
     const targetPos = { x: this.body.x - 32, y: this.body.y };
 
-    if (!this.canPlayTween || !this.canMove(map, targetPos)) {
+    if (!this.canPlayTween || !this.canMove(map, targetPos, "left")) {
       return;
     }
 
-    this.move(targetPos, "left");
+    this.move(targetPos, "left", map);
     this.body.anims.play("left", true);
   }
   async moveRight(map) {
     const targetPos = { x: this.body.x + 32, y: this.body.y };
-    if (!this.canPlayTween || !this.canMove(map, targetPos)) {
+    if (!this.canPlayTween || !this.canMove(map, targetPos, "right")) {
       return;
     }
 
-    this.move(targetPos, "right");
+    this.move(targetPos, "right", map);
     this.body.anims.play("right", true);
   }
 
-  canMove(map, targetPos) {
+  canMove(map, targetPos, dir) {
     const tile = map.getBlockingTile(targetPos);
     const otherChar = this.characterManager.getCharacterWorldXY(targetPos);
     if (otherChar || tile) {
