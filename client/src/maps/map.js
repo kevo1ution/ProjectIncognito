@@ -24,28 +24,6 @@ class Map {
     this.lightUp = this.lightUp.bind(this);
     this.setupLightLayer = this.setupLightLayer.bind(this);
     this.rotateGuardOrTower = this.rotateGuardOrTower.bind(this);
-
-    setInterval(() => {
-      const guardTiles = this.layers.guard.filterTiles(tile => {
-        return tile.index === config.GAME.tileIndex.guard;
-      });
-
-      const towerTiles = this.layers.guard.filterTiles(tile => {
-        return tile.index === config.GAME.tileIndex.tower;
-      });
-
-      guardTiles.forEach(tile => {
-        this.rotateGuardOrTower(
-          this.layers.guard.tileToWorldXY(tile.x, tile.y)
-        );
-      });
-
-      towerTiles.forEach(tile => {
-        this.rotateGuardOrTower(
-          this.layers.guard.tileToWorldXY(tile.x, tile.y)
-        );
-      });
-    }, 500);
   }
 
   lightUp(pos, dir, num, tileIndex) {
@@ -112,7 +90,7 @@ class Map {
   }
 
   isGuardedTile(posWorld) {
-    //iterate through the guards, and check if tile is within the range
+    return this.layers.light.getTileAtWorldXY(posWorld.x, posWorld.y) !== null;
   }
 
   rotateGuardOrTower(posWorld) {
