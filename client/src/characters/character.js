@@ -1,3 +1,6 @@
+import Phaser from "phaser";
+import config from "../config/config";
+
 class Character {
   constructor(spriteName, moveDuration, scene, startPos, characterManager) {
     this.characterManager = characterManager;
@@ -6,45 +9,55 @@ class Character {
     this.canPlayTween = true;
     this.moveDuration = moveDuration;
     this.scene = scene;
+    this.body.setDepth(config.GAME.sprite.depth);
+
+    this.sounds = {
+      run: scene.sound.add(spriteName + "run")
+    };
+
     scene.anims.create({
       key: "left",
-      frames: scene.anims.generateFrameNumbers(spriteName, {
-        start: 0,
-        end: 3
-      }),
-      frameRate: 4000 / moveDuration
+      frames: [
+        { key: spriteName, frame: 6 },
+        { key: spriteName, frame: 7 }
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1
     });
 
     scene.anims.create({
       key: "right",
-      frames: scene.anims.generateFrameNumbers(spriteName, {
-        start: 5,
-        end: 8
-      }),
-      frameRate: 4000 / moveDuration
+      frames: [
+        { key: spriteName, frame: 8 },
+        { key: spriteName, frame: 9 }
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1
     });
 
     scene.anims.create({
       key: "up",
-      frames: scene.anims.generateFrameNumbers(spriteName, {
-        start: 0,
-        end: 3
-      }),
-      frameRate: 4000 / moveDuration
+      frames: [
+        { key: spriteName, frame: 4 },
+        { key: spriteName, frame: 5 }
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1
     });
 
     scene.anims.create({
       key: "down",
-      frames: scene.anims.generateFrameNumbers(spriteName, {
-        start: 5,
-        end: 8
-      }),
-      frameRate: 4000 / moveDuration
+      frames: [
+        { key: spriteName, frame: 10 },
+        { key: spriteName, frame: 11 }
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1
     });
 
     scene.anims.create({
       key: "idle",
-      frames: [{ key: "dude", frame: 4 }],
+      frames: [{ key: spriteName, frame: 0 }],
       frameRate: 4000,
       repeat: -1
     });
@@ -56,10 +69,53 @@ class Character {
         if (animation.key === "idle") {
           return;
         }
+
+        this.sounds.run.stop();
         this.body.anims.play("idle", true);
       },
       scene
     );
+  }
+
+  async move(targetPos, dir) {
+    const footsteps = this.scene.add.image(
+      this.body.x,
+      this.body.y,
+      "footsteps"
+    );
+    switch (dir) {
+      case "up":
+        footsteps.setAngle(-90);
+        break;
+      case "left":
+        footsteps.setAngle(-180);
+        break;
+      case "down":
+        footsteps.setAngle(90);
+        break;
+    }
+
+    footsteps.setScale(0.03, 0.03);
+    footsteps.setDepth(0);
+    this.scene.tweens.add({
+      alpha: 0,
+      targets: footsteps,
+      duration: this.moveDuration * 4,
+      onComplete: () => {
+        footsteps.destroy();
+      }
+    });
+
+    this.sounds.run.play();
+    this.canPlayTween = false;
+    this.currentTween = this.scene.tweens.add({
+      ...targetPos,
+      targets: this.body,
+      duration: this.moveDuration,
+      onComplete: () => {
+        this.canPlayTween = true;
+      }
+    });
   }
 
   // Abstract virtual functions for moving up, down, left, right
@@ -69,15 +125,7 @@ class Character {
       return;
     }
 
-    this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      targets: this.body,
-      duration: this.moveDuration,
-      y: targetPos.y,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
-    });
+    this.move(targetPos, "up");
     this.body.anims.play("up", true);
   }
   async moveDown(map) {
@@ -87,15 +135,7 @@ class Character {
       return;
     }
 
-    this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      targets: this.body,
-      duration: this.moveDuration,
-      y: targetPos.y,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
-    });
+    this.move(targetPos, "down");
     this.body.anims.play("down", true);
   }
   async moveLeft(map) {
@@ -105,15 +145,7 @@ class Character {
       return;
     }
 
-    this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      targets: this.body,
-      duration: this.moveDuration,
-      x: targetPos.x,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
-    });
+    this.move(targetPos, "left");
     this.body.anims.play("left", true);
   }
   async moveRight(map) {
@@ -122,15 +154,7 @@ class Character {
       return;
     }
 
-    this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      targets: this.body,
-      duration: this.moveDuration,
-      x: targetPos.x,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
-    });
+    this.move(targetPos, "right");
     this.body.anims.play("right", true);
   }
 
