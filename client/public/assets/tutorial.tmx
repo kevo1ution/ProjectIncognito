@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="10" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="10">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="10" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="10">
  <editorsettings>
   <export target="tutorial.json" format="json"/>
  </editorsettings>
@@ -57,51 +57,52 @@
 276,276,276,276,276,276,276,276,276,276
 </data>
  </layer>
- <objectgroup id="3" name="objectsLayer">
-  <object id="1" gid="104" x="70.3633" y="103.756" width="32" height="32">
-   <properties>
-    <property name="type" value="item"/>
-   </properties>
-  </object>
-  <object id="2" gid="104" x="156.727" y="252.803" width="32" height="32">
-   <properties>
-    <property name="type" value="item"/>
-   </properties>
-  </object>
-  <object id="3" gid="104" x="102.401" y="397.67" width="32" height="32">
-   <properties>
-    <property name="type" value="item"/>
-   </properties>
-  </object>
-  <object id="4" gid="104" x="180.407" y="571.789" width="32" height="32">
-   <properties>
-    <property name="type" value="item"/>
-   </properties>
-  </object>
-  <object id="5" gid="105" x="213.838" y="404.635" width="32" height="32">
-   <properties>
-    <property name="type" value="item"/>
-   </properties>
-  </object>
-  <object id="6" gid="105" x="206.873" y="219.372" width="32" height="32">
-   <properties>
-    <property name="type" value="item"/>
-   </properties>
-  </object>
-  <object id="7" gid="105" x="155.334" y="91.2196" width="32" height="32">
-   <properties>
-    <property name="type" value="item"/>
-   </properties>
-  </object>
-  <object id="8" gid="17" x="55.0408" y="566.218" width="32" height="32">
-   <properties>
-    <property name="type" value="playerStart"/>
-   </properties>
-  </object>
-  <object id="9" gid="146" x="32.7535" y="63.3605" width="32" height="32">
-   <properties>
-    <property name="type" value="door"/>
-   </properties>
-  </object>
- </objectgroup>
+ <layer id="4" name="guardLayer" width="10" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,2684354864,0,304,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,304,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,304,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="5" name="lightLayer" width="10" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,327,327,327,327,
+0,0,0,327,0,0,327,0,0,0,
+0,0,0,327,0,0,327,0,0,0,
+0,0,0,327,0,0,327,0,0,0,
+0,0,0,327,0,0,327,0,0,0,
+0,0,0,327,327,0,0,0,0,0,
+0,0,0,0,327,0,0,0,0,0,
+0,0,0,0,327,0,0,0,0,0,
+0,0,0,0,327,0,0,0,0,0,
+0,0,0,0,327,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
 </map>
