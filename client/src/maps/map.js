@@ -1,4 +1,5 @@
 import config from "../config/config";
+import Game from "../Game";
 
 class Map {
   constructor(mapKey, scene) {
@@ -11,6 +12,7 @@ class Map {
     this.tileset = this.map.addTilesetImage("tilesBackground");
     this.layers = {
       background: this.map.createDynamicLayer("backgroundLayer", this.tileset),
+      moveable: this.map.createDynamicLayer("moveableLayer", this.tileset),
       blocked: this.map.createDynamicLayer("blockedLayer", this.tileset),
       guard: this.map.createDynamicLayer("guardLayer", this.tileset),
       light: this.map.createDynamicLayer("lightLayer", this.tileset)
@@ -24,6 +26,8 @@ class Map {
     this.lightUp = this.lightUp.bind(this);
     this.setupLightLayer = this.setupLightLayer.bind(this);
     this.rotateGuardOrTower = this.rotateGuardOrTower.bind(this);
+    this.getBlockingTile = this.getBlockingTile.bind(this);
+    this.isMoveable = this.isMoveable.bind(this);
   }
 
   lightUp(pos, dir, num, tileIndex) {
@@ -120,12 +124,65 @@ class Map {
   getBlockingTile(posWorld) {
     return (
       this.layers.blocked.getTileAtWorldXY(posWorld.x, posWorld.y) ||
-      this.layers.guard.getTileAtWorldXY(posWorld.x, posWorld.y)
+      this.layers.guard.getTileAtWorldXY(posWorld.x, posWorld.y) ||
+      this.layers.moveable.getTileAtWorldXY(posWorld.x, posWorld.y)
     );
   }
 
   isMoveable(posWorld, direction) {
-    return false;
+    const obstacle = this.layers.moveable.getTileAtWorldXY(
+      posWorld.x,
+      posWorld.y
+    );
+
+    const nextPos = { ...posWorld };
+
+    switch (direction) {
+      case "right":
+        nextPos.x += config.GAME.tileSize.x;
+        break;
+      case "down":
+        nextPos.y += config.GAME.tileSize.y;
+        break;
+      case "left":
+        nextPos.x -= config.GAME.tileSize.x;
+        break;
+      case "up":
+        nextPos.y -= config.GAME.tileSize.y;
+        break;
+      default:
+        throw new Error("Invalid Direction!");
+    }
+
+    return obstacle !== null && this.getBlockingTile(nextPos) === null;
+  }
+
+  moveMoveable(posWorld, direction) {
+    if (!this.isMoveable(posWorld, direction)) {
+      throw new Error("Trying to move obstacle that is not moveable");
+    }
+
+    let diff;
+    switch (direction) {
+      case "right":
+        diff = { x: 1, y: 0 };
+        break;
+      case "down":
+        diff = { x: 0, y: 1 };
+        break;
+      case "left":
+        diff = { x: -1, y: 0 };
+        break;
+      case "up":
+        diff = { x: 0, y: -1 };
+        break;
+      default:
+        throw new Error("Invalid Direction!");
+    }
+
+    const tile = this.layers.moveable.getTileAtWorldXY(posWorld.x, posWorld.y);
+    this.layers.moveable.putTileAt(tile, tile.x + diff.x, tile.y + diff.y);
+    this.layers.moveable.removeTileAt(tile.x, tile.y);
   }
 }
 

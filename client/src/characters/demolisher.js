@@ -4,4 +4,4 @@ class Demolisher extends Character {
 
 }
 
-export default Demolisher
+export default Demolisher;
