@@ -14,10 +14,10 @@ const GAME = {
   },
   characters: {
     move: {
-      RIGHT: 1,
-      DOWN: 2,
-      LEFT: 3,
-      UP: 4
+      RIGHT: "right",
+      DOWN: "down",
+      LEFT: "left",
+      UP: "up"
     },
     scout: {
       guardAndTowerRotation: Math.PI / 2

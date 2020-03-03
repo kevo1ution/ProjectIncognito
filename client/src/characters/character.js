@@ -121,7 +121,7 @@ class Character {
         footsteps.destroy();
       }
     });
-    this.body.anims.play("up", true);
+    this.body.anims.play(dir, true);
     this.sounds.run.play();
     this.canPlayTween = false;
     this.currentTween = this.scene.tweens.add({
