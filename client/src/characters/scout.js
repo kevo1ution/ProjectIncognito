@@ -14,6 +14,14 @@ class Scout extends Character {
       map.rotateGuardOrTower(pos);
     });
   }
+
+  async move(map, dir) {
+    const moved = await this.moveOnce(map, dir);
+    await this.moveOnce(map, dir);
+    if (moved) {
+      this.body.anims.play("idle", true);
+    }    
+  }
 }
 
 export default Scout;
