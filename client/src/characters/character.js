@@ -6,7 +6,7 @@ class Character {
     this.characterManager = characterManager;
     this.body = scene.add.sprite(startPos.x, startPos.y, spriteName);
     this.currentTween = scene.tweens.add({ duration: 0, targets: this.body });
-    this.canPlayTween = true;
+    this.moving = true;
     this.moveDuration = moveDuration;
     this.scene = scene;
     this.spriteName = spriteName;
@@ -138,11 +138,9 @@ class Character {
         throw new Error("Invalid Direction!");
     }
 
-    if (!this.canPlayTween || !this.canMove(map, targetPos, dir)) {
+    if (!this.canMove(map, targetPos, dir)) {
       return;
     }
-
-    this.canPlayTween = false;
 
     const thisChar = this;
     return new Promise((res, rej) => {
@@ -152,7 +150,6 @@ class Character {
         targets: thisChar.body,
         duration: thisChar.moveDuration,
         onComplete: () => {
-          thisChar.canPlayTween = true;
           res(true);
         }
       });
@@ -160,10 +157,16 @@ class Character {
   }
 
   async move(map, dir) {
+    if (!this.moving) {
+      return;
+    }
+    this.moving = false;
+
     const moved = await this.moveOnce(map, dir);
     if (moved) {
       this.body.anims.play("idle", true);
     }
+    this.moving = true;
   }
 
   canMove(map, targetPos, dir) {
