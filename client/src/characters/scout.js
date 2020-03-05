@@ -3,6 +3,10 @@ import config from "../config/config";
 
 class Scout extends Character {
   ability(map) {
+    if (this.moving) {
+      return;
+    }
+
     const guardsPositions = [
       { x: this.body.x + config.GAME.tileSize.x, y: this.body.y },
       { x: this.body.x - config.GAME.tileSize.x, y: this.body.y },
@@ -16,17 +20,17 @@ class Scout extends Character {
   }
 
   async move(map, dir) {
-    if (!this.moving) {
+    if (this.moving) {
       return;
     }
-    this.moving = false;
+    this.moving = true;
 
     const moved = await this.moveOnce(map, dir);
     await this.moveOnce(map, dir);
     if (moved) {
       this.body.anims.play("idle", true);
     }
-    this.moving = true;
+    this.moving = false;
   }
 }
 

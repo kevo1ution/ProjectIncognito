@@ -6,7 +6,7 @@ class Character {
     this.characterManager = characterManager;
     this.body = scene.add.sprite(startPos.x, startPos.y, spriteName);
     this.currentTween = scene.tweens.add({ duration: 0, targets: this.body });
-    this.moving = true;
+    this.moving = false;
     this.moveDuration = moveDuration;
     this.scene = scene;
     this.spriteName = spriteName;
@@ -157,16 +157,16 @@ class Character {
   }
 
   async move(map, dir) {
-    if (!this.moving) {
+    if (this.moving) {
       return;
     }
-    this.moving = false;
+    this.moving = true;
 
     const moved = await this.moveOnce(map, dir);
     if (moved) {
       this.body.anims.play("idle", true);
     }
-    this.moving = true;
+    this.moving = false;
   }
 
   canMove(map, targetPos, dir) {
