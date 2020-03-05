@@ -9,12 +9,24 @@ class Character {
     this.canPlayTween = true;
     this.moveDuration = moveDuration;
     this.scene = scene;
+    this.spriteName = spriteName;
     this.body.setDepth(config.GAME.sprite.depth);
+    this.events = new Phaser.Events.EventEmitter();
 
     this.sounds = {
       run: scene.sound.add(spriteName + "run")
     };
 
+    this.setupAnimations();
+    this.setupEventHooks();
+
+    this.body.anims.play("idle", true);
+  }
+
+  setupAnimations() {
+    const spriteName = this.spriteName;
+    const scene = this.scene;
+    const moveDuration = this.moveDuration;
     scene.anims.create({
       key: "left",
       frames: [
@@ -61,47 +73,28 @@ class Character {
       frameRate: 4000,
       repeat: -1
     });
-
-    this.body.anims.play("idle", true);
-    this.body.on(
-      "animationcomplete",
-      (animation, frame) => {
-        if (animation.key === "idle") {
-          return;
-        }
-
-        this.sounds.run.stop();
-        this.body.anims.play("idle", true);
-      },
-      scene
-    );
   }
 
-  async move(map, dir) {
+  setupEventHooks() {
+    this.events.addListener("move", this.moveEffects, this);
+  }
+
+  moveEffects(map, dir) {
     let angle = 0;
-    const targetPos = { x: this.body.x, y: this.body.y };
     switch (dir) {
       case config.GAME.characters.move.UP:
         angle = -90;
-        targetPos.y -= config.GAME.tileSize.y;
         break;
       case config.GAME.characters.move.LEFT:
         angle = -180;
-        targetPos.x -= config.GAME.tileSize.x;
         break;
       case config.GAME.characters.move.DOWN:
         angle = 90;
-        targetPos.y += config.GAME.tileSize.y;
         break;
       case config.GAME.characters.move.RIGHT:
-        targetPos.x += config.GAME.tileSize.x;
         break;
       default:
         throw new Error("Invalid Direction!");
-    }
-
-    if (!this.canPlayTween || !this.canMove(map, targetPos, dir)) {
-      return;
     }
 
     const footsteps = this.scene.add.image(
@@ -121,17 +114,56 @@ class Character {
         footsteps.destroy();
       }
     });
+
     this.body.anims.play(dir, true);
     this.sounds.run.play();
+  }
+
+  moveOnce(map, dir) {
+    const targetPos = { x: this.body.x, y: this.body.y };
+    switch (dir) {
+      case config.GAME.characters.move.UP:
+        targetPos.y -= config.GAME.tileSize.y;
+        break;
+      case config.GAME.characters.move.LEFT:
+        targetPos.x -= config.GAME.tileSize.x;
+        break;
+      case config.GAME.characters.move.DOWN:
+        targetPos.y += config.GAME.tileSize.y;
+        break;
+      case config.GAME.characters.move.RIGHT:
+        targetPos.x += config.GAME.tileSize.x;
+        break;
+      default:
+        throw new Error("Invalid Direction!");
+    }
+
+    if (!this.canPlayTween || !this.canMove(map, targetPos, dir)) {
+      return;
+    }
+
     this.canPlayTween = false;
-    this.currentTween = this.scene.tweens.add({
-      ...targetPos,
-      targets: this.body,
-      duration: this.moveDuration,
-      onComplete: () => {
-        this.canPlayTween = true;
-      }
+
+    const thisChar = this;
+    return new Promise((res, rej) => {
+      thisChar.events.emit("move", map, dir);
+      thisChar.currentTween = thisChar.scene.tweens.add({
+        ...targetPos,
+        targets: thisChar.body,
+        duration: thisChar.moveDuration,
+        onComplete: () => {
+          thisChar.canPlayTween = true;
+          res(true);
+        }
+      });
     });
+  }
+
+  async move(map, dir) {
+    const moved = await this.moveOnce(map, dir);
+    if (moved) {
+      this.body.anims.play("idle", true);
+    }
   }
 
   canMove(map, targetPos, dir) {
