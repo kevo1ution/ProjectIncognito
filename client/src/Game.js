@@ -48,6 +48,8 @@ function create() {
   this.input.keyboard.on("keydown-F", function(event) {
     characterManager.getCurrentCharacter().ability(map);
   });
+
+  this.scale.resize(map.map.widthInPixels, map.map.heightInPixels);
 }
 
 function update() {}
