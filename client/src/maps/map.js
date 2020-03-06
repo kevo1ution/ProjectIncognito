@@ -23,6 +23,7 @@ class Map {
 
     this.setupLightLayer();
 
+    this.scene = scene;
     this.lightUp = this.lightUp.bind(this);
     this.setupLightLayer = this.setupLightLayer.bind(this);
     this.rotateGuardOrTower = this.rotateGuardOrTower.bind(this);
@@ -157,7 +158,7 @@ class Map {
     return obstacle !== null && this.getBlockingTile(nextPos) === null;
   }
 
-  moveMoveable(posWorld, direction) {
+  moveMoveable(posWorld, direction, duration) {
     if (!this.isMoveable(posWorld, direction)) {
       throw new Error("Trying to move obstacle that is not moveable");
     }
@@ -181,8 +182,20 @@ class Map {
     }
 
     const tile = this.layers.moveable.getTileAtWorldXY(posWorld.x, posWorld.y);
-    this.layers.moveable.putTileAt(tile, tile.x + diff.x, tile.y + diff.y);
-    this.layers.moveable.removeTileAt(tile.x, tile.y);
+    const targetPos = {
+      x: tile.x + diff.x,
+      y: tile.y + diff.y
+    };
+    this.scene.tweens.add({
+      pixelX: targetPos.x * config.GAME.tileSize.x,
+      pixelY: targetPos.y * config.GAME.tileSize.y,
+      targets: tile,
+      duration,
+      onComplete: () => {
+        this.layers.moveable.putTileAt(tile.index, targetPos.x, targetPos.y);
+        this.layers.moveable.removeTileAt(tile.x, tile.y);
+      }
+    });
   }
 }
 

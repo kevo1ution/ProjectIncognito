@@ -11,7 +11,7 @@ class Demolisher extends Character {
     //check if obstacle, check if obstacle is moveable
     if (tile) {
       if (map.isMoveable(targetPos, dir)) {
-        map.moveMoveable(targetPos, dir);
+        map.moveMoveable(targetPos, dir, this.moveDuration);
         return true;
       } else {
         return false;
