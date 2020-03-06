@@ -39,7 +39,7 @@ class CharacterManager {
 
   toggleCharacter() {
     this.curCharIndex++;
-    this.curCharIndex = this.curCharIndex % this.characters.length; //1 % 3 = 1
+    this.curCharIndex = this.curCharIndex % this.characters.length;
   }
 
   getCharacterWorldXY(targetPos) {
