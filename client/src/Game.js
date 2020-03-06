@@ -13,14 +13,24 @@ function preload() {
     frameWidth: config.GAME.sprite.size.x,
     frameHeight: config.GAME.sprite.size.y
   });
+  this.load.spritesheet("recon", "assets/demolisher.png", {
+    frameWidth: config.GAME.sprite.size.x,
+    frameHeight: config.GAME.sprite.size.y
+  });
+  this.load.spritesheet("scout", "assets/demolisher.png", {
+    frameWidth: config.GAME.sprite.size.x,
+    frameHeight: config.GAME.sprite.size.y
+  });
 
   this.load.audio("demolisherrun", "assets/run.wav");
+  this.load.audio("reconrun", "assets/run.wav");
+  this.load.audio("scoutrun", "assets/run.wav");
   this.load.image("footsteps", "assets/footsteps.png");
 }
 
 function create() {
   const map = new Map("map", this);
-  const characterManager = new CharacterManager(this);
+  const characterManager = new CharacterManager(this, map);
 
   this.input.keyboard.on("keydown-SPACE", function(event) {
     characterManager.toggleCharacter();

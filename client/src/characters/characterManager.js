@@ -1,22 +1,45 @@
 import Demolisher from "./demolisher";
 import Recon from "./recon";
 import Scout from "./scout";
+import config from "../config/config";
+
+const nameToClass = {
+  demolisher: Demolisher,
+  recon: Recon,
+  scout: Scout
+};
 
 class CharacterManager {
-  constructor(scene) {
-    this.characters = [
-      new Demolisher("demolisher", 300, scene, { x: 32 + 16, y: 32 + 16 }, this),
-      new Recon("demolisher", 300, scene, { x: 32 * 2 + 16, y: 32 + 16 }, this),
-      new Scout("demolisher", 300, scene, { x: 32 + 16, y: 32 * 2 + 16 }, this)
-    ];
+  constructor(scene, map) {
+    this.characters = [];
     this.curCharIndex = 0;
-    this.curChar = this.characters[0];
+
+    this.setupCharacters(scene, map);
+  }
+
+  setupCharacters(scene, map) {
+    Object.keys(nameToClass).forEach(charName => {
+      const pos = map.startPos[charName];
+      if (pos) {
+        this.characters.push(
+          new nameToClass[charName](
+            charName,
+            300,
+            scene,
+            {
+              x: (pos.x + 0.5) * config.GAME.tileSize.x,
+              y: (pos.y + 0.5) * config.GAME.tileSize.y
+            },
+            this
+          )
+        );
+      }
+    });
   }
 
   toggleCharacter() {
     this.curCharIndex++;
-    this.curCharIndex = this.curCharIndex % 3; //1 % 3 = 1
-    this.curChar = this.characters[this.curCharIndex];
+    this.curCharIndex = this.curCharIndex % this.characters.length; //1 % 3 = 1
   }
 
   getCharacterWorldXY(targetPos) {
@@ -28,7 +51,7 @@ class CharacterManager {
   }
 
   getCurrentCharacter() {
-    return this.curChar;
+    return this.characters[this.curCharIndex];
   }
 }
 
