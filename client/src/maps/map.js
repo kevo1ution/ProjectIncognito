@@ -19,6 +19,7 @@ class Map {
       start: this.map.createDynamicLayer("startLayer", this.tileset)
     };
     this.startPos = {};
+    this.scene = scene
 
     this.setupLightLayer();
     this.setupStartPos();

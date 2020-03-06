@@ -77,6 +77,7 @@ class Character {
 
   setupEventHooks() {
     this.events.addListener("move", this.moveEffects, this);
+    this.events.addListener("moveEnd", this.moveEndEffects, this);
   }
 
   moveEffects(map, dir) {
@@ -119,6 +120,10 @@ class Character {
     this.sounds.run.play();
   }
 
+  moveEndEffects() {
+    this.sounds.run.stop();
+  }
+
   moveOnce(map, dir) {
     const targetPos = { x: this.body.x, y: this.body.y };
     switch (dir) {
@@ -150,6 +155,7 @@ class Character {
         targets: thisChar.body,
         duration: thisChar.moveDuration,
         onComplete: () => {
+          thisChar.events.emit("moveEnd");
           res(true);
         }
       });
