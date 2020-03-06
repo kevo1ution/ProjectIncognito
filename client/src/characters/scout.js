@@ -2,7 +2,7 @@ import Character from "./character";
 import config from "../config/config";
 
 class Scout extends Character {
-  ability(map) {
+  ability() {
     if (this.moving) {
       return;
     }
@@ -15,18 +15,18 @@ class Scout extends Character {
     ];
 
     guardsPositions.forEach(pos => {
-      map.rotateGuardOrTower(pos);
+      this.scene.map.rotateGuardOrTower(pos);
     });
   }
 
-  async move(map, dir) {
+  async move(dir) {
     if (this.moving) {
       return;
     }
     this.moving = true;
 
-    const moved = await this.moveOnce(map, dir);
-    await this.moveOnce(map, dir);
+    const moved = await this.moveOnce(dir);
+    await this.moveOnce(dir);
     if (moved) {
       this.body.anims.play("idle", true);
     }

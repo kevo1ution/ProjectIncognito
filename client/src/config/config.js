@@ -3,9 +3,14 @@ import Phaser from "phaser";
 // Constant global variables to configure out game. These values should never change
 const GAME = {
   tileIndex: {
-    guard: 305,
-    tower: 304,
-    light: 327
+    guard: 62,
+    tower: 48,
+    light: 71,
+    character: {
+      demolisher: 127,
+      scout: 113,
+      recon: 99
+    }
   },
   tileSize: { x: 32, y: 32 },
   sprite: {

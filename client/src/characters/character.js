@@ -77,9 +77,10 @@ class Character {
 
   setupEventHooks() {
     this.events.addListener("move", this.moveEffects, this);
+    this.events.addListener("moveEnd", this.moveEndEffects, this);
   }
 
-  moveEffects(map, dir) {
+  moveEffects(dir) {
     let angle = 0;
     switch (dir) {
       case config.GAME.characters.move.UP:
@@ -119,8 +120,13 @@ class Character {
     this.sounds.run.play();
   }
 
-  moveOnce(map, dir) {
+  moveEndEffects() {
+    this.sounds.run.stop();
+  }
+
+  moveOnce(dir) {
     const targetPos = { x: this.body.x, y: this.body.y };
+    const map = this.scene.map;
     switch (dir) {
       case config.GAME.characters.move.UP:
         targetPos.y -= config.GAME.tileSize.y;
@@ -138,39 +144,40 @@ class Character {
         throw new Error("Invalid Direction!");
     }
 
-    if (!this.canMove(map, targetPos, dir)) {
+    if (!this.canMove(targetPos, dir)) {
       return;
     }
 
     const thisChar = this;
     return new Promise((res, rej) => {
-      thisChar.events.emit("move", map, dir);
+      thisChar.events.emit("move", dir);
       thisChar.currentTween = thisChar.scene.tweens.add({
         ...targetPos,
         targets: thisChar.body,
         duration: thisChar.moveDuration,
         onComplete: () => {
+          thisChar.events.emit("moveEnd");
           res(true);
         }
       });
     });
   }
 
-  async move(map, dir) {
+  async move(dir) {
     if (this.moving) {
       return;
     }
     this.moving = true;
 
-    const moved = await this.moveOnce(map, dir);
+    const moved = await this.moveOnce(dir);
     if (moved) {
       this.body.anims.play("idle", true);
     }
     this.moving = false;
   }
 
-  canMove(map, targetPos, dir) {
-    const tile = map.getBlockingTile(targetPos);
+  canMove(targetPos, dir) {
+    const tile = this.scene.map.getBlockingTile(targetPos);
     const otherChar = this.characterManager.getCharacterWorldXY(targetPos);
     if (otherChar || tile) {
       return false;
@@ -179,7 +186,7 @@ class Character {
     return true;
   }
 
-  ability(map) {}
+  ability() {}
 }
 
 export default Character;

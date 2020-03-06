@@ -15,20 +15,14 @@ class Map {
       moveable: this.map.createDynamicLayer("moveableLayer", this.tileset),
       blocked: this.map.createDynamicLayer("blockedLayer", this.tileset),
       guard: this.map.createDynamicLayer("guardLayer", this.tileset),
-      light: this.map.createDynamicLayer("lightLayer", this.tileset)
+      light: this.map.createDynamicLayer("lightLayer", this.tileset),
+      start: this.map.createDynamicLayer("startLayer", this.tileset)
     };
-
-    this.guardMap = {};
-    this.layers.light.alpha = 0.5;
+    this.startPos = {};
+    this.scene = scene;
 
     this.setupLightLayer();
-
-    this.scene = scene;
-    this.lightUp = this.lightUp.bind(this);
-    this.setupLightLayer = this.setupLightLayer.bind(this);
-    this.rotateGuardOrTower = this.rotateGuardOrTower.bind(this);
-    this.getBlockingTile = this.getBlockingTile.bind(this);
-    this.isMoveable = this.isMoveable.bind(this);
+    this.setupStartPos();
   }
 
   lightUp(pos, dir, num, tileIndex) {
@@ -65,7 +59,8 @@ class Map {
 
   setupLightLayer() {
     //clear the previous lights
-    this.layers.light.replaceByIndex(327, -1);
+    this.layers.light.replaceByIndex(config.GAME.tileIndex.light, -1);
+    this.layers.light.alpha = 0.5;
 
     const guardTiles = this.layers.guard.filterTiles(tile => {
       return tile.index === config.GAME.tileIndex.guard;
@@ -94,6 +89,20 @@ class Map {
     });
   }
 
+  setupStartPos() {
+    this.layers.start.setVisible(false);
+
+    Object.keys(config.GAME.tileIndex.character).forEach(key => {
+      const tile = this.layers.start.findTile(
+        tile => tile.index === config.GAME.tileIndex.character[key]
+      );
+
+      if (tile) {
+        this.startPos[key] = { x: tile.x, y: tile.y };
+      }
+    });
+  }
+
   isGuardedTile(posWorld) {
     return this.layers.light.getTileAtWorldXY(posWorld.x, posWorld.y) !== null;
   }
@@ -116,7 +125,9 @@ class Map {
         config.GAME.characters.scout.guardAndTowerRotation;
       guardOrTowerTile.rotation %= Math.PI * 2;
     } else {
-      throw Error("Invalid guard or tower tile index detected!");
+      throw Error(
+        "Invalid guard or tower tile index detected: " + guardOrTowerTile.index
+      );
     }
 
     this.setupLightLayer();
@@ -155,7 +166,11 @@ class Map {
         throw new Error("Invalid Direction!");
     }
 
-    return obstacle !== null && this.getBlockingTile(nextPos) === null;
+    return (
+      obstacle !== null &&
+      this.getBlockingTile(nextPos) === null &&
+      this.scene.characterManager.getCharacterWorldXY(nextPos) == null
+    );
   }
 
   moveMoveable(posWorld, direction, duration) {

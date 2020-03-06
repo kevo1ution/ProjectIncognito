@@ -13,43 +13,77 @@ function preload() {
     frameWidth: config.GAME.sprite.size.x,
     frameHeight: config.GAME.sprite.size.y
   });
+  this.load.spritesheet("recon", "assets/demolisher.png", {
+    frameWidth: config.GAME.sprite.size.x,
+    frameHeight: config.GAME.sprite.size.y
+  });
+  this.load.spritesheet("scout", "assets/demolisher.png", {
+    frameWidth: config.GAME.sprite.size.x,
+    frameHeight: config.GAME.sprite.size.y
+  });
 
   this.load.audio("demolisherrun", "assets/run.wav");
+  this.load.audio("reconrun", "assets/run.wav");
+  this.load.audio("scoutrun", "assets/run.wav");
   this.load.image("footsteps", "assets/footsteps.png");
 }
 
 function create() {
-  const map = new Map("map", this);
-  const characterManager = new CharacterManager(this);
+  this.map = new Map("map", this);
+  this.characterManager = new CharacterManager(this);
 
-  this.input.keyboard.on("keydown-SPACE", function(event) {
-    characterManager.toggleCharacter();
-  });
-  this.input.keyboard.on("keydown-W", function(event) {
-    characterManager
-      .getCurrentCharacter()
-      .move(map, config.GAME.characters.move.UP);
-  });
-  this.input.keyboard.on("keydown-A", function(event) {
-    characterManager
-      .getCurrentCharacter()
-      .move(map, config.GAME.characters.move.LEFT);
-  });
-  this.input.keyboard.on("keydown-S", function(event) {
-    characterManager
-      .getCurrentCharacter()
-      .move(map, config.GAME.characters.move.DOWN);
-  });
-  this.input.keyboard.on("keydown-D", function(event) {
-    characterManager
-      .getCurrentCharacter()
-      .move(map, config.GAME.characters.move.RIGHT);
-  });
-  this.input.keyboard.on("keydown-F", function(event) {
-    characterManager.getCurrentCharacter().ability(map);
-  });
+  this.input.keyboard.on(
+    "keydown-SPACE",
+    function(event) {
+      this.characterManager.toggleCharacter();
+    },
+    this
+  );
+  this.input.keyboard.on(
+    "keydown-W",
+    function(event) {
+      this.characterManager
+        .getCurrentCharacter()
+        .move(config.GAME.characters.move.UP);
+    },
+    this
+  );
+  this.input.keyboard.on(
+    "keydown-A",
+    function(event) {
+      this.characterManager
+        .getCurrentCharacter()
+        .move(config.GAME.characters.move.LEFT);
+    },
+    this
+  );
+  this.input.keyboard.on(
+    "keydown-S",
+    function(event) {
+      this.characterManager
+        .getCurrentCharacter()
+        .move(config.GAME.characters.move.DOWN);
+    },
+    this
+  );
+  this.input.keyboard.on(
+    "keydown-D",
+    function(event) {
+      this.characterManager
+        .getCurrentCharacter()
+        .move(config.GAME.characters.move.RIGHT);
+    },
+    this
+  );
+  this.input.keyboard.on(
+    "keydown-F",
+    function(event) {
+      this.characterManager.getCurrentCharacter().ability();
+    },
+    this
+  );
 
-  this.scale.resize(map.map.widthInPixels, map.map.heightInPixels);
+  this.scale.resize(this.map.map.widthInPixels, this.map.map.heightInPixels);
 }
 
 function update() {}
