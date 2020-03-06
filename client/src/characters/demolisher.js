@@ -1,7 +1,8 @@
 import Character from "./character";
 
 class Demolisher extends Character {
-  canMove(map, targetPos, dir) {
+  canMove(targetPos, dir) {
+    const map = this.scene.map;
     const tile = map.getBlockingTile(targetPos);
     const otherChar = this.characterManager.getCharacterWorldXY(targetPos);
     if (otherChar) {

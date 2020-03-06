@@ -10,14 +10,15 @@ const nameToClass = {
 };
 
 class CharacterManager {
-  constructor(scene, map) {
+  constructor(scene) {
     this.characters = [];
     this.curCharIndex = 0;
 
-    this.setupCharacters(scene, map);
+    this.setupCharacters(scene);
   }
 
-  setupCharacters(scene, map) {
+  setupCharacters(scene) {
+    const map = scene.map;
     Object.keys(nameToClass).forEach(charName => {
       const pos = map.startPos[charName];
       if (pos) {

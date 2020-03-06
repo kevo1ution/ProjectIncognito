@@ -19,7 +19,7 @@ class Map {
       start: this.map.createDynamicLayer("startLayer", this.tileset)
     };
     this.startPos = {};
-    this.scene = scene
+    this.scene = scene;
 
     this.setupLightLayer();
     this.setupStartPos();
@@ -166,7 +166,11 @@ class Map {
         throw new Error("Invalid Direction!");
     }
 
-    return obstacle !== null && this.getBlockingTile(nextPos) === null;
+    return (
+      obstacle !== null &&
+      this.getBlockingTile(nextPos) === null &&
+      this.scene.characterManager.getCharacterWorldXY(nextPos) == null
+    );
   }
 
   moveMoveable(posWorld, direction, duration) {
