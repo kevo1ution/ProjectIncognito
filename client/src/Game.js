@@ -6,16 +6,15 @@ import CharacterManager from "./characters/characterManager";
 
 const game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
 
-function loadLevel(scene) {
-}
-
-function clearLevel() {}
-
-function restartLevel() {
-  loadLevel();
-}
-
 function setupKeyboardEvents(scene) {
+  scene.input.keyboard.on(
+    "keydown-R",
+    function(event) {
+      this.map.loadLevel("map");
+    },
+    scene
+  );
+
   scene.input.keyboard.on(
     "keydown-SPACE",
     function(event) {
@@ -26,43 +25,50 @@ function setupKeyboardEvents(scene) {
   scene.input.keyboard.on(
     "keydown-W",
     function(event) {
-      scene.characterManager
-        .getCurrentCharacter()
-        .move(config.GAME.characters.move.UP);
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.move(config.GAME.characters.move.UP);
+      }
     },
     scene
   );
   scene.input.keyboard.on(
     "keydown-A",
     function(event) {
-      scene.characterManager
-        .getCurrentCharacter()
-        .move(config.GAME.characters.move.LEFT);
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.move(config.GAME.characters.move.LEFT);
+      }
     },
     scene
   );
   scene.input.keyboard.on(
     "keydown-S",
     function(event) {
-      scene.characterManager
-        .getCurrentCharacter()
-        .move(config.GAME.characters.move.DOWN);
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.move(config.GAME.characters.move.DOWN);
+      }
     },
     scene
   );
   scene.input.keyboard.on(
     "keydown-D",
     function(event) {
-      scene.characterManager
-        .getCurrentCharacter()
-        .move(config.GAME.characters.move.RIGHT);
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.move(config.GAME.characters.move.RIGHT);
+      }
     },
     scene
   );
   scene.input.keyboard.on(
     "keydown-F",
     function(event) {
-      scene.characterManager.getCurrentCharacter().ability();
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.ability();
+      }
     },
     scene
   );
@@ -94,10 +100,7 @@ function create() {
   const scene = this;
   scene.map = new Map(scene);
   scene.characterManager = new CharacterManager(scene);
-  scene.map.loadLevel("map")
-  scene.characterManager.setupCharacters()
 
-  loadLevel(this);
   setupKeyboardEvents(this);
 }
 

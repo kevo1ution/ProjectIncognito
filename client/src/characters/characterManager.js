@@ -53,6 +53,8 @@ class CharacterManager {
         this
       )
     };
+
+    this.reset();
   }
 
   setupCharacters() {

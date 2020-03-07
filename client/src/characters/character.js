@@ -27,7 +27,7 @@ class Character {
     this.body.setActive(false).setVisible(false);
   }
 
-  enable(){
+  enable() {
     this.body.setActive(true).setVisible(true);
   }
 
@@ -115,11 +115,12 @@ class Character {
     footsteps.setScale(0.03, 0.03);
     footsteps.setDepth(0);
 
-    this.scene.tweens.add({
+    const footTween = this.scene.tweens.add({
       alpha: 0,
       targets: footsteps,
       duration: this.moveDuration * 4,
       onComplete: () => {
+        footTween.remove();
         footsteps.destroy();
       }
     });
@@ -159,15 +160,16 @@ class Character {
     const thisChar = this;
     return new Promise((res, rej) => {
       thisChar.events.emit("move", dir);
-      thisChar.currentTween = thisChar.scene.tweens.add({
+      const moveTween = (thisChar.currentTween = thisChar.scene.tweens.add({
         ...targetPos,
         targets: thisChar.body,
         duration: thisChar.moveDuration,
         onComplete: () => {
+          moveTween.remove();
           thisChar.events.emit("moveEnd");
           res(true);
         }
-      });
+      }));
     });
   }
 

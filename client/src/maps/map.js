@@ -16,6 +16,7 @@ class Map {
   loadLevel(mapKey) {
     this.reset();
 
+    this.level = mapKey;
     this.map = this.scene.make.tilemap({
       key: mapKey,
       tileWidth: config.GAME.tileSize.x,
@@ -34,10 +35,9 @@ class Map {
 
     this.setupLightLayer();
     this.setupStartPos();
-    this.scene.scale.resize(
-      this.map.widthInPixels,
-      this.map.heightInPixels
-    );
+    this.scene.scale.resize(this.map.widthInPixels, this.map.heightInPixels);
+
+    this.scene.characterManager.setupCharacters();
   }
 
   lightUp(pos, dir, num, tileIndex) {
@@ -216,12 +216,13 @@ class Map {
       x: tile.x + diff.x,
       y: tile.y + diff.y
     };
-    this.scene.tweens.add({
+    const moveTween = this.scene.tweens.add({
       pixelX: targetPos.x * config.GAME.tileSize.x,
       pixelY: targetPos.y * config.GAME.tileSize.y,
       targets: tile,
       duration,
       onComplete: () => {
+        moveTween.remove();
         this.layers.moveable.putTileAt(tile.index, targetPos.x, targetPos.y);
         this.layers.moveable.removeTileAt(tile.x, tile.y);
       }
