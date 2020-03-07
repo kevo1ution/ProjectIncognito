@@ -2,8 +2,21 @@ import config from "../config/config";
 import Game from "../Game";
 
 class Map {
-  constructor(mapKey, scene) {
-    this.map = scene.make.tilemap({
+  constructor(scene) {
+    this.startPos = {};
+    this.scene = scene;
+  }
+
+  reset() {
+    if (this.map) {
+      this.map.destroy();
+    }
+  }
+
+  loadLevel(mapKey) {
+    this.reset();
+
+    this.map = this.scene.make.tilemap({
       key: mapKey,
       tileWidth: config.GAME.tileSize.x,
       tileHeight: config.GAME.tileSize.y
@@ -18,11 +31,13 @@ class Map {
       light: this.map.createDynamicLayer("lightLayer", this.tileset),
       start: this.map.createDynamicLayer("startLayer", this.tileset)
     };
-    this.startPos = {};
-    this.scene = scene;
 
     this.setupLightLayer();
     this.setupStartPos();
+    this.scene.scale.resize(
+      this.map.widthInPixels,
+      this.map.heightInPixels
+    );
   }
 
   lightUp(pos, dir, num, tileIndex) {

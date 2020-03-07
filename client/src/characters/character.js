@@ -23,6 +23,14 @@ class Character {
     this.body.anims.play("idle", true);
   }
 
+  disable() {
+    this.body.setActive(false).setVisible(false);
+  }
+
+  enable(){
+    this.body.setActive(true).setVisible(true);
+  }
+
   setupAnimations() {
     const spriteName = this.spriteName;
     const scene = this.scene;
