@@ -10,6 +10,10 @@ const GAME = {
       demolisher: 127,
       scout: 113,
       recon: 99
+    },
+    cracked: {
+      weak: 61,
+      hole: 62
     }
   },
   tileSize: { x: 32, y: 32 },

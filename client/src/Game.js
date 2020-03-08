@@ -6,6 +6,84 @@ import CharacterManager from "./characters/characterManager";
 
 const game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
 
+function setupKeyboardEvents(scene) {
+  scene.input.keyboard.on(
+    "keydown-R",
+    function(event) {
+      this.map.loadLevel("map");
+    },
+    scene
+  );
+
+  scene.input.keyboard.on(
+    "keydown-SPACE",
+    function(event) {
+      scene.characterManager.toggleCharacter();
+    },
+    scene
+  );
+  scene.input.keyboard.on(
+    "keydown-W",
+    function(event) {
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.move(config.GAME.characters.move.UP);
+      }
+    },
+    scene
+  );
+  scene.input.keyboard.on(
+    "keydown-A",
+    function(event) {
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.move(config.GAME.characters.move.LEFT);
+      }
+    },
+    scene
+  );
+  scene.input.keyboard.on(
+    "keydown-S",
+    function(event) {
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.move(config.GAME.characters.move.DOWN);
+      }
+    },
+    scene
+  );
+  scene.input.keyboard.on(
+    "keydown-D",
+    function(event) {
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.move(config.GAME.characters.move.RIGHT);
+      }
+    },
+    scene
+  );
+  scene.input.keyboard.on(
+    "keydown-F",
+    function(event) {
+      const char = scene.characterManager.getCurrentCharacter();
+      if (char) {
+        char.ability();
+      }
+    },
+    scene
+  );
+}
+
+function setupGameEvents(scene) {
+  scene.events.addListener("lose", () => {
+    alert("You lost! Press R to restart");
+  });
+
+  scene.events.addListener("win", () => {
+    alert("You won!");
+  });
+}
+
 function preload() {
   this.load.image("tilesBackground", "assets/gridtiles.png");
   this.load.tilemapTiledJSON("map", "assets/tutorial.json");
@@ -29,61 +107,13 @@ function preload() {
 }
 
 function create() {
-  this.map = new Map("map", this);
-  this.characterManager = new CharacterManager(this);
+  const scene = this;
+  scene.map = new Map(scene);
+  scene.characterManager = new CharacterManager(scene);
+  scene.map.loadLevel("map");
 
-  this.input.keyboard.on(
-    "keydown-SPACE",
-    function(event) {
-      this.characterManager.toggleCharacter();
-    },
-    this
-  );
-  this.input.keyboard.on(
-    "keydown-W",
-    function(event) {
-      this.characterManager
-        .getCurrentCharacter()
-        .move(config.GAME.characters.move.UP);
-    },
-    this
-  );
-  this.input.keyboard.on(
-    "keydown-A",
-    function(event) {
-      this.characterManager
-        .getCurrentCharacter()
-        .move(config.GAME.characters.move.LEFT);
-    },
-    this
-  );
-  this.input.keyboard.on(
-    "keydown-S",
-    function(event) {
-      this.characterManager
-        .getCurrentCharacter()
-        .move(config.GAME.characters.move.DOWN);
-    },
-    this
-  );
-  this.input.keyboard.on(
-    "keydown-D",
-    function(event) {
-      this.characterManager
-        .getCurrentCharacter()
-        .move(config.GAME.characters.move.RIGHT);
-    },
-    this
-  );
-  this.input.keyboard.on(
-    "keydown-F",
-    function(event) {
-      this.characterManager.getCurrentCharacter().ability();
-    },
-    this
-  );
-
-  this.scale.resize(this.map.map.widthInPixels, this.map.map.heightInPixels);
+  setupKeyboardEvents(scene);
+  setupGameEvents(scene);
 }
 
 function update() {}

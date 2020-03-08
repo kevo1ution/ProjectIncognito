@@ -2,8 +2,22 @@ import config from "../config/config";
 import Game from "../Game";
 
 class Map {
-  constructor(mapKey, scene) {
-    this.map = scene.make.tilemap({
+  constructor(scene) {
+    this.startPos = {};
+    this.scene = scene;
+  }
+
+  reset() {
+    if (this.map) {
+      this.map.destroy();
+    }
+  }
+
+  loadLevel(mapKey) {
+    this.reset();
+
+    this.level = mapKey;
+    this.map = this.scene.make.tilemap({
       key: mapKey,
       tileWidth: config.GAME.tileSize.x,
       tileHeight: config.GAME.tileSize.y
@@ -15,14 +29,16 @@ class Map {
       moveable: this.map.createDynamicLayer("moveableLayer", this.tileset),
       blocked: this.map.createDynamicLayer("blockedLayer", this.tileset),
       guard: this.map.createDynamicLayer("guardLayer", this.tileset),
+      cracked: this.map.createDynamicLayer("crackedLayer", this.tileset),
       light: this.map.createDynamicLayer("lightLayer", this.tileset),
       start: this.map.createDynamicLayer("startLayer", this.tileset)
     };
-    this.startPos = {};
-    this.scene = scene;
 
     this.setupLightLayer();
     this.setupStartPos();
+    this.scene.scale.resize(this.map.widthInPixels, this.map.heightInPixels);
+
+    this.scene.characterManager.setupCharacters();
   }
 
   lightUp(pos, dir, num, tileIndex) {
@@ -48,13 +64,18 @@ class Map {
         throw Error("Invalid direction!");
     }
 
+    let isPlrSeen = false;
     for (let x = pos.x; x <= finalPos.x; x++) {
       for (let y = pos.y; y <= finalPos.y; y++) {
+        isPlrSeen =
+          isPlrSeen || this.scene.characterManager.getCharacterXY({ x, y });
         if (this.layers.light.getTileAt(x, y) === null) {
           this.layers.light.putTileAt(tileIndex, x, y);
         }
       }
     }
+
+    return isPlrSeen;
   }
 
   setupLightLayer() {
@@ -70,23 +91,30 @@ class Map {
       return tile.index === config.GAME.tileIndex.tower;
     });
 
+    let isPlrSeen = false;
     guardTiles.forEach(tile => {
-      this.lightUp(
-        { x: tile.x, y: tile.y },
-        tile.rotation,
-        config.GAME.obstacle.guardSight,
-        config.GAME.tileIndex.light
-      );
+      isPlrSeen =
+        isPlrSeen ||
+        this.lightUp(
+          { x: tile.x, y: tile.y },
+          tile.rotation,
+          config.GAME.obstacle.guardSight,
+          config.GAME.tileIndex.light
+        );
     });
 
     towerTiles.forEach(tile => {
-      this.lightUp(
-        { x: tile.x, y: tile.y },
-        tile.rotation,
-        config.GAME.obstacle.towerSight,
-        config.GAME.tileIndex.light
-      );
+      isPlrSeen =
+        isPlrSeen ||
+        this.lightUp(
+          { x: tile.x, y: tile.y },
+          tile.rotation,
+          config.GAME.obstacle.towerSight,
+          config.GAME.tileIndex.light
+        );
     });
+
+    return isPlrSeen;
   }
 
   setupStartPos() {
@@ -101,6 +129,16 @@ class Map {
         this.startPos[key] = { x: tile.x, y: tile.y };
       }
     });
+  }
+
+  isHole(posWorld) {
+    const tile = this.layers.cracked.getTileAtWorldXY(posWorld.x, posWorld.y);
+    return tile && tile.index === config.GAME.tileIndex.cracked.hole;
+  }
+
+  isCracked(posWorld) {
+    const tile = this.layers.cracked.getTileAtWorldXY(posWorld.x, posWorld.y);
+    return tile && tile.index === config.GAME.tileIndex.cracked.weak;
   }
 
   isGuardedTile(posWorld) {
@@ -130,7 +168,20 @@ class Map {
       );
     }
 
-    this.setupLightLayer();
+    const isPlrSeen = this.setupLightLayer();
+
+    if (isPlrSeen) {
+      this.scene.events.emit("lose");
+    }
+  }
+
+  breakWeakTerrain(posWorld) {
+    this.layers.cracked.removeTileAtWorldXY(posWorld.x, posWorld.y);
+    this.layers.cracked.putTileAtWorldXY(
+      config.GAME.tileIndex.cracked.hole,
+      posWorld.x,
+      posWorld.y
+    );
   }
 
   getBlockingTile(posWorld) {
@@ -201,12 +252,13 @@ class Map {
       x: tile.x + diff.x,
       y: tile.y + diff.y
     };
-    this.scene.tweens.add({
+    const moveTween = this.scene.tweens.add({
       pixelX: targetPos.x * config.GAME.tileSize.x,
       pixelY: targetPos.y * config.GAME.tileSize.y,
       targets: tile,
       duration,
       onComplete: () => {
+        moveTween.remove();
         this.layers.moveable.putTileAt(tile.index, targetPos.x, targetPos.y);
         this.layers.moveable.removeTileAt(tile.x, tile.y);
       }

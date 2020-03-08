@@ -5,8 +5,6 @@ class Character {
   constructor(spriteName, moveDuration, scene, startPos, characterManager) {
     this.characterManager = characterManager;
     this.body = scene.add.sprite(startPos.x, startPos.y, spriteName);
-    this.currentTween = scene.tweens.add({ duration: 0, targets: this.body });
-    this.moving = false;
     this.moveDuration = moveDuration;
     this.scene = scene;
     this.spriteName = spriteName;
@@ -19,7 +17,24 @@ class Character {
 
     this.setupAnimations();
     this.setupEventHooks();
+  }
 
+  disable() {
+    if (this.currentTween) {
+      this.currentTween.remove();
+      this.currentTween = null;
+    }
+
+    this.moveEndEffects();
+    this.sounds.run.stop();
+
+    this.moving = true;
+    this.body.setActive(false).setVisible(false);
+  }
+
+  enable() {
+    this.moving = false;
+    this.body.setActive(true).setVisible(true);
     this.body.anims.play("idle", true);
   }
 
@@ -80,7 +95,7 @@ class Character {
     this.events.addListener("moveEnd", this.moveEndEffects, this);
   }
 
-  moveEffects(dir) {
+  moveEffects(curPos, dir) {
     let angle = 0;
     switch (dir) {
       case config.GAME.characters.move.UP:
@@ -98,6 +113,10 @@ class Character {
         throw new Error("Invalid Direction!");
     }
 
+    if (this.scene.map.isCracked(curPos)) {
+      this.scene.map.breakWeakTerrain(curPos);
+    }
+
     const footsteps = this.scene.add.image(
       this.body.x,
       this.body.y,
@@ -107,11 +126,12 @@ class Character {
     footsteps.setScale(0.03, 0.03);
     footsteps.setDepth(0);
 
-    this.scene.tweens.add({
+    const footTween = this.scene.tweens.add({
       alpha: 0,
       targets: footsteps,
       duration: this.moveDuration * 4,
       onComplete: () => {
+        footTween.remove();
         footsteps.destroy();
       }
     });
@@ -120,12 +140,20 @@ class Character {
     this.sounds.run.play();
   }
 
-  moveEndEffects() {
-    this.sounds.run.stop();
+  moveEndEffects(targetPos) {
+    if (this.currentTween) {
+      this.currentTween.remove();
+      this.currentTween = null;
+    }
+
+    if (targetPos && this.deadlyMove(targetPos)) {
+      this.scene.events.emit("lose");
+    }
   }
 
   moveOnce(dir) {
     const targetPos = { x: this.body.x, y: this.body.y };
+    const curPos = { x: this.body.x, y: this.body.y };
     const map = this.scene.map;
     switch (dir) {
       case config.GAME.characters.move.UP:
@@ -150,16 +178,19 @@ class Character {
 
     const thisChar = this;
     return new Promise((res, rej) => {
-      thisChar.events.emit("move", dir);
-      thisChar.currentTween = thisChar.scene.tweens.add({
-        ...targetPos,
-        targets: thisChar.body,
-        duration: thisChar.moveDuration,
-        onComplete: () => {
-          thisChar.events.emit("moveEnd");
-          res(true);
+      thisChar.events.emit("move", curPos, dir);
+      thisChar.currentTween = thisChar.currentTween = thisChar.scene.tweens.add(
+        {
+          ...targetPos,
+          targets: thisChar.body,
+          duration: thisChar.moveDuration,
+          onComplete: () => {
+            thisChar.events.emit("moveEnd", targetPos);
+
+            res(true);
+          }
         }
-      });
+      );
     });
   }
 
@@ -172,8 +203,17 @@ class Character {
     const moved = await this.moveOnce(dir);
     if (moved) {
       this.body.anims.play("idle", true);
+      this.sounds.run.stop();
     }
     this.moving = false;
+  }
+
+  deadlyMove(targetPos) {
+    console.log(this.scene.map.isHole(targetPos));
+    return (
+      this.scene.map.isGuardedTile(targetPos) ||
+      this.scene.map.isHole(targetPos)
+    );
   }
 
   canMove(targetPos, dir) {

@@ -3,37 +3,73 @@ import Recon from "./recon";
 import Scout from "./scout";
 import config from "../config/config";
 
-const nameToClass = {
-  demolisher: Demolisher,
-  recon: Recon,
-  scout: Scout
-};
-
 class CharacterManager {
   constructor(scene) {
+    this.loadedCharacters = {};
     this.characters = [];
     this.curCharIndex = 0;
+    this.scene = scene;
 
-    this.setupCharacters(scene);
+    this.loadCharacters();
   }
 
-  setupCharacters(scene) {
+  reset() {
+    Object.keys(this.loadedCharacters).forEach(charName => {
+      this.loadedCharacters[charName].disable();
+    });
+  }
+
+  loadCharacters() {
+    const scene = this.scene;
+    this.loadedCharacters = {
+      demolisher: new Demolisher(
+        "demolisher",
+        300,
+        scene,
+        {
+          x: 100,
+          y: 500
+        },
+        this
+      ),
+      recon: new Recon(
+        "recon",
+        300,
+        scene,
+        {
+          x: 0,
+          y: 0
+        },
+        this
+      ),
+      scout: new Scout(
+        "scout",
+        300,
+        scene,
+        {
+          x: 0,
+          y: 0
+        },
+        this
+      )
+    };
+
+    this.reset();
+  }
+
+  setupCharacters() {
+    this.reset();
+
+    const scene = this.scene;
     const map = scene.map;
-    Object.keys(nameToClass).forEach(charName => {
+    Object.keys(this.loadedCharacters).forEach(charName => {
       const pos = map.startPos[charName];
       if (pos) {
-        this.characters.push(
-          new nameToClass[charName](
-            charName,
-            300,
-            scene,
-            {
-              x: (pos.x + 0.5) * config.GAME.tileSize.x,
-              y: (pos.y + 0.5) * config.GAME.tileSize.y
-            },
-            this
-          )
-        );
+        const char = this.loadedCharacters[charName];
+        this.characters.push(char);
+        char.body.x = (pos.x + 0.5) * config.GAME.tileSize.x;
+        char.body.y = (pos.y + 0.5) * config.GAME.tileSize.y;
+        char.enable();
       }
     });
   }
@@ -43,12 +79,21 @@ class CharacterManager {
     this.curCharIndex = this.curCharIndex % this.characters.length;
   }
 
-  getCharacterWorldXY(targetPos) {
+  getCharacterXY(targetPos) {
     return this.characters.find(character => {
-      return (
-        character.body.x === targetPos.x && character.body.y === targetPos.y
+      const tilePos = this.scene.map.map.worldToTileXY(
+        character.body.x,
+        character.body.y
       );
+      return tilePos.x === targetPos.x && tilePos.y === targetPos.y;
     });
+  }
+
+  getCharacterWorldXY(targetPos) {
+    return this.characters.find(
+      character =>
+        character.body.x === targetPos.x && character.body.y === targetPos.y
+    );
   }
 
   getCurrentCharacter() {
