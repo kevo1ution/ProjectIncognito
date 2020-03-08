@@ -150,6 +150,10 @@ class Character {
     }
     if (targetPos && this.scene.map.isWin(targetPos)) {
       this.scene.characterManager.removeCharacterInLineup(this);
+
+      if (this.scene.characterManager.didWin()) {
+        this.scene.events.emit("win");
+      }
     }
   }
 

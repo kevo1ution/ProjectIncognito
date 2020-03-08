@@ -75,6 +75,10 @@ class CharacterManager {
     });
   }
 
+  didWin() {
+    return this.characters.length === 0;
+  }
+
   removeCharacterInLineup(character) {
     this.characters = this.characters.filter(char => char !== character);
     this.curCharIndex %= this.characters.length;
