@@ -77,12 +77,10 @@ function setupKeyboardEvents(scene) {
 function setupGameEvents(scene) {
   scene.events.addListener("lose", () => {
     alert("You lost! Press R to restart");
-    console.log(scene);
   });
 
   scene.events.addListener("win", () => {
     alert("You won!");
-    console.log(scene);
   });
 }
 

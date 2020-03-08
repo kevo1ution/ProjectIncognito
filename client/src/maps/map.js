@@ -63,13 +63,18 @@ class Map {
         throw Error("Invalid direction!");
     }
 
+    let isPlrSeen = false;
     for (let x = pos.x; x <= finalPos.x; x++) {
       for (let y = pos.y; y <= finalPos.y; y++) {
+        isPlrSeen =
+          isPlrSeen || this.scene.characterManager.getCharacterXY({ x, y });
         if (this.layers.light.getTileAt(x, y) === null) {
           this.layers.light.putTileAt(tileIndex, x, y);
         }
       }
     }
+
+    return isPlrSeen;
   }
 
   setupLightLayer() {
@@ -85,23 +90,30 @@ class Map {
       return tile.index === config.GAME.tileIndex.tower;
     });
 
+    let isPlrSeen = false;
     guardTiles.forEach(tile => {
-      this.lightUp(
-        { x: tile.x, y: tile.y },
-        tile.rotation,
-        config.GAME.obstacle.guardSight,
-        config.GAME.tileIndex.light
-      );
+      isPlrSeen =
+        isPlrSeen ||
+        this.lightUp(
+          { x: tile.x, y: tile.y },
+          tile.rotation,
+          config.GAME.obstacle.guardSight,
+          config.GAME.tileIndex.light
+        );
     });
 
     towerTiles.forEach(tile => {
-      this.lightUp(
-        { x: tile.x, y: tile.y },
-        tile.rotation,
-        config.GAME.obstacle.towerSight,
-        config.GAME.tileIndex.light
-      );
+      isPlrSeen =
+        isPlrSeen ||
+        this.lightUp(
+          { x: tile.x, y: tile.y },
+          tile.rotation,
+          config.GAME.obstacle.towerSight,
+          config.GAME.tileIndex.light
+        );
     });
+
+    return isPlrSeen;
   }
 
   setupStartPos() {
@@ -153,7 +165,11 @@ class Map {
       );
     }
 
-    this.setupLightLayer();
+    const isPlrSeen = this.setupLightLayer();
+
+    if (isPlrSeen) {
+      this.scene.events.emit("lose");
+    }
   }
 
   getBlockingTile(posWorld) {

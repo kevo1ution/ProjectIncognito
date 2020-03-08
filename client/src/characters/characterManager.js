@@ -79,12 +79,21 @@ class CharacterManager {
     this.curCharIndex = this.curCharIndex % this.characters.length;
   }
 
-  getCharacterWorldXY(targetPos) {
+  getCharacterXY(targetPos) {
     return this.characters.find(character => {
-      return (
-        character.body.x === targetPos.x && character.body.y === targetPos.y
+      const tilePos = this.scene.map.map.worldToTileXY(
+        character.body.x,
+        character.body.y
       );
+      return tilePos.x === targetPos.x && tilePos.y === targetPos.y;
     });
+  }
+
+  getCharacterWorldXY(targetPos) {
+    return this.characters.find(
+      character =>
+        character.body.x === targetPos.x && character.body.y === targetPos.y
+    );
   }
 
   getCurrentCharacter() {
