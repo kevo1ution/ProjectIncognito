@@ -29,6 +29,7 @@ class Map {
       moveable: this.map.createDynamicLayer("moveableLayer", this.tileset),
       blocked: this.map.createDynamicLayer("blockedLayer", this.tileset),
       guard: this.map.createDynamicLayer("guardLayer", this.tileset),
+      cracked: this.map.createDynamicLayer("crackedLayer", this.tileset),
       light: this.map.createDynamicLayer("lightLayer", this.tileset),
       start: this.map.createDynamicLayer("startLayer", this.tileset)
     };
@@ -131,11 +132,13 @@ class Map {
   }
 
   isHole(posWorld) {
-    return false;
+    const tile = this.layers.cracked.getTileAtWorldXY(posWorld.x, posWorld.y);
+    return tile && tile.index === config.GAME.tileIndex.cracked.hole;
   }
 
   isCracked(posWorld) {
-    return false;
+    const tile = this.layers.cracked.getTileAtWorldXY(posWorld.x, posWorld.y);
+    return tile && tile.index === config.GAME.tileIndex.cracked.weak;
   }
 
   isGuardedTile(posWorld) {
@@ -170,6 +173,15 @@ class Map {
     if (isPlrSeen) {
       this.scene.events.emit("lose");
     }
+  }
+
+  breakWeakTerrain(posWorld) {
+    this.layers.cracked.removeTileAtWorldXY(posWorld.x, posWorld.y);
+    this.layers.cracked.putTileAtWorldXY(
+      config.GAME.tileIndex.cracked.hole,
+      posWorld.x,
+      posWorld.y
+    );
   }
 
   getBlockingTile(posWorld) {

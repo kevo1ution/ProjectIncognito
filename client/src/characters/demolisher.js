@@ -1,6 +1,14 @@
 import Character from "./character";
 
 class Demolisher extends Character {
+  deadlyMove(targetPos) {
+    return (
+      this.scene.map.isGuardedTile(targetPos) ||
+      this.scene.map.isHole(targetPos) ||
+      this.scene.map.isCracked(targetPos)
+    );
+  }
+
   canMove(targetPos, dir) {
     const map = this.scene.map;
     const tile = map.getBlockingTile(targetPos);

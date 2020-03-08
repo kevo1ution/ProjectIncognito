@@ -95,7 +95,7 @@ class Character {
     this.events.addListener("moveEnd", this.moveEndEffects, this);
   }
 
-  moveEffects(dir) {
+  moveEffects(curPos, dir) {
     let angle = 0;
     switch (dir) {
       case config.GAME.characters.move.UP:
@@ -111,6 +111,10 @@ class Character {
         break;
       default:
         throw new Error("Invalid Direction!");
+    }
+
+    if (this.scene.map.isCracked(curPos)) {
+      this.scene.map.breakWeakTerrain(curPos);
     }
 
     const footsteps = this.scene.add.image(
@@ -136,15 +140,20 @@ class Character {
     this.sounds.run.play();
   }
 
-  moveEndEffects() {
+  moveEndEffects(targetPos) {
     if (this.currentTween) {
       this.currentTween.remove();
       this.currentTween = null;
+    }
+
+    if (targetPos && this.deadlyMove(targetPos)) {
+      this.scene.events.emit("lose");
     }
   }
 
   moveOnce(dir) {
     const targetPos = { x: this.body.x, y: this.body.y };
+    const curPos = { x: this.body.x, y: this.body.y };
     const map = this.scene.map;
     switch (dir) {
       case config.GAME.characters.move.UP:
@@ -167,21 +176,17 @@ class Character {
       return;
     }
 
-    const isDeadlyMove = this.deadlyMove(targetPos);
-
     const thisChar = this;
     return new Promise((res, rej) => {
-      thisChar.events.emit("move", dir);
+      thisChar.events.emit("move", curPos, dir);
       thisChar.currentTween = thisChar.currentTween = thisChar.scene.tweens.add(
         {
           ...targetPos,
           targets: thisChar.body,
           duration: thisChar.moveDuration,
           onComplete: () => {
-            thisChar.events.emit("moveEnd");
-            if (isDeadlyMove) {
-              thisChar.scene.events.emit("lose");
-            }
+            thisChar.events.emit("moveEnd", targetPos);
+
             res(true);
           }
         }
@@ -204,9 +209,11 @@ class Character {
   }
 
   deadlyMove(targetPos) {
-    const isGuarded = this.scene.map.isGuardedTile(targetPos);
-
-    return isGuarded;
+    console.log(this.scene.map.isHole(targetPos));
+    return (
+      this.scene.map.isGuardedTile(targetPos) ||
+      this.scene.map.isHole(targetPos)
+    );
   }
 
   canMove(targetPos, dir) {
