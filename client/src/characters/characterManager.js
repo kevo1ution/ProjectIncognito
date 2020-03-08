@@ -62,6 +62,7 @@ class CharacterManager {
 
     const scene = this.scene;
     const map = scene.map;
+    this.characters = [];
     Object.keys(this.loadedCharacters).forEach(charName => {
       const pos = map.startPos[charName];
       if (pos) {
@@ -72,6 +73,12 @@ class CharacterManager {
         char.enable();
       }
     });
+  }
+
+  removeCharacterInLineup(character) {
+    this.characters = this.characters.filter(char => char !== character);
+    this.curCharIndex %= this.characters.length;
+    character.disable();
   }
 
   toggleCharacter() {

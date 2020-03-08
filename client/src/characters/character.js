@@ -25,7 +25,6 @@ class Character {
       this.currentTween = null;
     }
 
-    this.moveEndEffects();
     this.sounds.run.stop();
 
     this.moving = true;
@@ -149,6 +148,9 @@ class Character {
     if (targetPos && this.deadlyMove(targetPos)) {
       this.scene.events.emit("lose");
     }
+    if (targetPos && this.scene.map.isWin(targetPos)) {
+      this.scene.characterManager.removeCharacterInLineup(this);
+    }
   }
 
   moveOnce(dir) {
@@ -209,7 +211,6 @@ class Character {
   }
 
   deadlyMove(targetPos) {
-    console.log(this.scene.map.isHole(targetPos));
     return (
       this.scene.map.isGuardedTile(targetPos) ||
       this.scene.map.isHole(targetPos)

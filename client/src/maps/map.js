@@ -31,6 +31,7 @@ class Map {
       guard: this.map.createDynamicLayer("guardLayer", this.tileset),
       cracked: this.map.createDynamicLayer("crackedLayer", this.tileset),
       light: this.map.createDynamicLayer("lightLayer", this.tileset),
+      win: this.map.createDynamicLayer("winLayer", this.tileset),
       start: this.map.createDynamicLayer("startLayer", this.tileset)
     };
 
@@ -143,6 +144,10 @@ class Map {
 
   isGuardedTile(posWorld) {
     return this.layers.light.getTileAtWorldXY(posWorld.x, posWorld.y) !== null;
+  }
+
+  isWin(posWorld) {
+    return this.layers.win.getTileAtWorldXY(posWorld.x, posWorld.y) !== null;
   }
 
   rotateGuardOrTower(posWorld) {
