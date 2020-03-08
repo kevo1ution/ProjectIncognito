@@ -118,6 +118,14 @@ class Map {
     });
   }
 
+  isHole(posWorld) {
+    return false;
+  }
+
+  isCracked(posWorld) {
+    return false;
+  }
+
   isGuardedTile(posWorld) {
     return this.layers.light.getTileAtWorldXY(posWorld.x, posWorld.y) !== null;
   }

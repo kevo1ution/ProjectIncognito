@@ -5,8 +5,6 @@ class Character {
   constructor(spriteName, moveDuration, scene, startPos, characterManager) {
     this.characterManager = characterManager;
     this.body = scene.add.sprite(startPos.x, startPos.y, spriteName);
-    this.currentTween = scene.tweens.add({ duration: 0, targets: this.body });
-    this.moving = false;
     this.moveDuration = moveDuration;
     this.scene = scene;
     this.spriteName = spriteName;
@@ -19,16 +17,25 @@ class Character {
 
     this.setupAnimations();
     this.setupEventHooks();
-
-    this.body.anims.play("idle", true);
   }
 
   disable() {
+    if (this.currentTween) {
+      this.currentTween.remove();
+      this.currentTween = null;
+    }
+
+    this.moveEndEffects();
+    this.sounds.run.stop();
+
+    this.moving = true;
     this.body.setActive(false).setVisible(false);
   }
 
   enable() {
+    this.moving = false;
     this.body.setActive(true).setVisible(true);
+    this.body.anims.play("idle", true);
   }
 
   setupAnimations() {
@@ -130,7 +137,10 @@ class Character {
   }
 
   moveEndEffects() {
-    this.sounds.run.stop();
+    if (this.currentTween) {
+      this.currentTween.remove();
+      this.currentTween = null;
+    }
   }
 
   moveOnce(dir) {
@@ -157,19 +167,25 @@ class Character {
       return;
     }
 
+    const isDeadlyMove = this.deadlyMove(targetPos);
+
     const thisChar = this;
     return new Promise((res, rej) => {
       thisChar.events.emit("move", dir);
-      const moveTween = (thisChar.currentTween = thisChar.scene.tweens.add({
-        ...targetPos,
-        targets: thisChar.body,
-        duration: thisChar.moveDuration,
-        onComplete: () => {
-          moveTween.remove();
-          thisChar.events.emit("moveEnd");
-          res(true);
+      thisChar.currentTween = thisChar.currentTween = thisChar.scene.tweens.add(
+        {
+          ...targetPos,
+          targets: thisChar.body,
+          duration: thisChar.moveDuration,
+          onComplete: () => {
+            thisChar.events.emit("moveEnd");
+            if (isDeadlyMove) {
+              thisChar.scene.events.emit("lose");
+            }
+            res(true);
+          }
         }
-      }));
+      );
     });
   }
 
@@ -182,8 +198,15 @@ class Character {
     const moved = await this.moveOnce(dir);
     if (moved) {
       this.body.anims.play("idle", true);
+      this.sounds.run.stop();
     }
     this.moving = false;
+  }
+
+  deadlyMove(targetPos) {
+    const isGuarded = this.scene.map.isGuardedTile(targetPos);
+
+    return isGuarded;
   }
 
   canMove(targetPos, dir) {

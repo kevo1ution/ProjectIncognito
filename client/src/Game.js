@@ -74,6 +74,18 @@ function setupKeyboardEvents(scene) {
   );
 }
 
+function setupGameEvents(scene) {
+  scene.events.addListener("lose", () => {
+    alert("You lost! Press R to restart");
+    console.log(scene);
+  });
+
+  scene.events.addListener("win", () => {
+    alert("You won!");
+    console.log(scene);
+  });
+}
+
 function preload() {
   this.load.image("tilesBackground", "assets/gridtiles.png");
   this.load.tilemapTiledJSON("map", "assets/tutorial.json");
@@ -100,8 +112,10 @@ function create() {
   const scene = this;
   scene.map = new Map(scene);
   scene.characterManager = new CharacterManager(scene);
+  scene.map.loadLevel("map");
 
-  setupKeyboardEvents(this);
+  setupKeyboardEvents(scene);
+  setupGameEvents(scene);
 }
 
 function update() {}
