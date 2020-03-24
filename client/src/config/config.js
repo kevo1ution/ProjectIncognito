@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 
 // Constant global variables to configure out game. These values should never change
 const GAME = {
@@ -47,6 +48,15 @@ function getPhaserConfig(preload, create, update) {
       preload,
       create,
       update
+    },
+    plugins: {
+      scene: [
+        {
+          key: "rexUI",
+          plugin: RexUIPlugin,
+          mapping: "rexUI"
+        }
+      ]
     }
   };
 }
