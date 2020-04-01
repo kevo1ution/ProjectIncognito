@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="-1" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
+ <tileset firstgid="1" name="randomTileset" tilewidth="32" tileheight="32" tilecount="140" columns="14">
+  <image source="gridtiles.png" width="448" height="320"/>
+ </tileset>
+ <tileset firstgid="141" name="items" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="items.png" width="512" height="512"/>
+ </tileset>
+ <layer id="3" name="background" width="10" height="10">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,4,4,1,1,
+1,1,1,1,1,1,1,4,1,1,
+1,48,1,1,1,1,1,1,1,1,
+1,48,1,1,1,1,1,1,1,1,
+1,48,1,1,1,1,1,1,1,1,
+1,48,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <layer id="2" name="obstacles" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,145,0,0,0,0,0,0,
+0,0,0,0,0,143,0,0,0,0,
+0,0,0,143,0,0,0,0,0,0,
+0,0,0,0,0,0,0,143,0,0,
+0,0,0,0,0,143,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="4" name="enemies" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>
