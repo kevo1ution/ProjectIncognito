@@ -6,7 +6,7 @@ import CharacterManager from "./characters/characterManager";
 
 let game;
 
-function setupGame() {
+function setupGame(selectedLevel) {
   game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
 
   function setupKeyboardEvents(scene) {
@@ -89,7 +89,7 @@ function setupGame() {
 
   function preload() {
     this.load.image("tilesBackground", "assets/gridtiles.png");
-    this.load.tilemapTiledJSON("map", "assets/tutorial.json");
+    this.load.tilemapTiledJSON("map", `assets/levels/level${selectedLevel}.json`);
     this.load.spritesheet("demolisher", "assets/demolisher.png", {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y
@@ -135,7 +135,7 @@ function Game({ setCurrentView, selectedLevel }) {
     };
   });
 
-  setupGame();
+  setupGame(selectedLevel);
   return <div></div>;
 }
 
