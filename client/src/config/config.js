@@ -42,14 +42,16 @@ const GAME = {
 const VIEW = {
   START_MENU: 0,
   LEVEL_MENU: 1,
-  GAME: 2
+  GAME: 2,
+  LOST: 3,
+  WIN: 4
 };
 
 function getPhaserConfig(preload, create, update) {
   return {
     type: Phaser.AUTO,
-    width: 320,
-    height: 640,
+    width: 0,
+    height: 0,
     scene: {
       preload,
       create,

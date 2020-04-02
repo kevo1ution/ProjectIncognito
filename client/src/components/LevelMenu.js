@@ -1,12 +1,11 @@
 import React from "react";
-import { Grid, Row, Col, Container, Button, Jumbotron } from "react-bootstrap";
+import { Row, Col, Container, Button, Jumbotron } from "react-bootstrap";
 
 import config from "../config/config";
 
 function LevelMenu({ setCurrentView, setSelectedLevel }) {
   const numLevels = config.GAME.levelCount;
   const numCols = 3;
-  const numRows = Math.ceil(numLevels / 3);
 
   const rows = [];
   for (let i = 0; i < numLevels / 3; i++) {

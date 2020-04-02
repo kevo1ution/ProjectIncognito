@@ -1,5 +1,4 @@
 import config from "../config/config";
-import Game from "../Game";
 
 class Map {
   constructor(scene) {
