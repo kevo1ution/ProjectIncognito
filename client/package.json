@@ -1,5 +1,5 @@
 {
-  "homepage":"https://kevo1ution.github.io/ProjectIncognito",
+  "homepage": "https://kevo1ution.github.io/ProjectIncognito",
   "name": "client",
   "version": "0.1.0",
   "private": true,
@@ -7,8 +7,10 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
+    "bootstrap": "^4.4.1",
     "phaser": "^3.22.0",
     "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0"
   },
