@@ -160,7 +160,7 @@ class Character {
   moveOnce(dir) {
     const targetPos = { x: this.body.x, y: this.body.y };
     const curPos = { x: this.body.x, y: this.body.y };
-    const map = this.scene.map;
+
     switch (dir) {
       case config.GAME.characters.move.UP:
         targetPos.y -= config.GAME.tileSize.y;

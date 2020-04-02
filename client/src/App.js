@@ -1,23 +1,45 @@
 import React, { useState } from "react";
-import Game from "./Game";
+import Game from "./components/Game";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import config from "./config/config";
 import StartMenu from "./components/StartMenu";
 import LevelMenu from "./components/LevelMenu";
+import LostMenu from "./components/LostMenu";
+import WinMenu from "./components/WinMenu";
 
 function App() {
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [currentView, setCurrentView] = useState(config.VIEW.START_MENU);
-
+  console.log(selectedLevel);
   function getView() {
     switch (currentView) {
       case config.VIEW.START_MENU:
         return <StartMenu {...{ setCurrentView }}></StartMenu>;
       case config.VIEW.LEVEL_MENU:
-        return <LevelMenu {...{ setCurrentView, setSelectedLevel }}></LevelMenu>;
+        return (
+          <LevelMenu {...{ setCurrentView, setSelectedLevel }}></LevelMenu>
+        );
       case config.VIEW.GAME:
-        return <Game {...{ setCurrentView, selectedLevel }}></Game>;
+        return (
+          <Game
+            {...{
+              setCurrentView,
+              selectedLevel,
+              setSelectedLevel
+            }}
+          ></Game>
+        );
+      case config.VIEW.LOST:
+        return <LostMenu {...{ setCurrentView }}></LostMenu>;
+      case config.VIEW.WIN:
+        return (
+          <WinMenu
+            {...{ setCurrentView, selectedLevel, setSelectedLevel }}
+          ></WinMenu>
+        );
+      default:
+        throw Error("Invalid View: " + currentView);
     }
   }
 
@@ -26,14 +48,15 @@ function App() {
     <div
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
         width: "100vw",
         backgroundColor: "#303030"
       }}
-      id="game"
     >
+      <div id="game"></div>
       {getView()}
     </div>
   );

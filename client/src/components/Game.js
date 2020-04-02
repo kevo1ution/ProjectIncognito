@@ -1,19 +1,40 @@
 import Phaser from "phaser";
 import React, { useEffect } from "react";
-import config from "./config/config";
-import Map from "./maps/map";
-import CharacterManager from "./characters/characterManager";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import config from "../config/config";
+import Map from "../maps/map";
+import CharacterManager from "../characters/characterManager";
 
 let game;
 
-function setupGame(selectedLevel) {
+function restartGame(selectedLevel, setSelectedLevel, setCurrentView) {
+  game.destroy(true);
+  setupGame(selectedLevel, setSelectedLevel, setCurrentView);
+}
+
+function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
   game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
+
+  function setupGameEvents(scene) {
+    scene.events.addListener("win", () => {
+      const nextLevel = selectedLevel + 1;
+      if (nextLevel <= config.GAME.levelCount) {
+        setCurrentView(config.VIEW.WIN);
+      } else {
+        setCurrentView(config.VIEW.LEVEL_MENU);
+      }
+    });
+
+    scene.events.addListener("lose", () => {
+      setCurrentView(config.VIEW.LOST);
+    });
+  }
 
   function setupKeyboardEvents(scene) {
     scene.input.keyboard.on(
       "keydown-R",
       function(event) {
-        this.map.loadLevel("map");
+        restartGame(selectedLevel, setSelectedLevel, setCurrentView);
       },
       scene
     );
@@ -77,19 +98,12 @@ function setupGame(selectedLevel) {
     );
   }
 
-  function setupGameEvents(scene) {
-    scene.events.addListener("lose", () => {
-      alert("You lost! Press R to restart");
-    });
-
-    scene.events.addListener("win", () => {
-      alert("You won!");
-    });
-  }
-
   function preload() {
     this.load.image("tilesBackground", "assets/gridtiles.png");
-    this.load.tilemapTiledJSON("map", `assets/levels/level${selectedLevel}.json`);
+    this.load.tilemapTiledJSON(
+      "map",
+      `assets/levels/level${selectedLevel}.json`
+    );
     this.load.spritesheet("demolisher", "assets/demolisher.png", {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y
@@ -128,15 +142,43 @@ function destroyGame() {
   }
 }
 
-function Game({ setCurrentView, selectedLevel }) {
+function Game({ setCurrentView, selectedLevel, setSelectedLevel }) {
   useEffect(() => {
     return function cleanup() {
       destroyGame();
     };
   });
 
-  setupGame(selectedLevel);
-  return <div></div>;
+  setupGame(selectedLevel, setSelectedLevel, setCurrentView);
+
+  return (
+    <div>
+      <Container style={{ padding: "10px" }}>
+        <Row>
+          <Col>
+            <Button
+              onClick={() => {
+                setCurrentView(config.VIEW.LEVEL_MENU);
+              }}
+              variant="outline-light"
+            >
+              {"<="}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              onClick={() => {
+                restartGame(selectedLevel, setSelectedLevel, setCurrentView);
+              }}
+              variant="outline-warning"
+            >
+              restart
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
 }
 
 export default Game;
