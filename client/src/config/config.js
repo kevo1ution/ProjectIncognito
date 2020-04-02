@@ -4,7 +4,7 @@ import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 // Constant global variables to configure out game. These values should never change
 const GAME = {
   tileIndex: {
-    guard: 62,
+    guard: 34,
     tower: 48,
     light: 71,
     character: {

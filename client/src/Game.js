@@ -3,6 +3,7 @@ import React from "react";
 import config from "./config/config";
 import Map from "./maps/map";
 import CharacterManager from "./characters/characterManager";
+import { Buttons } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 
 const game = new Phaser.Game(config.getPhaserConfig(preload, create, update));
 
@@ -114,6 +115,14 @@ function create() {
 
   setupKeyboardEvents(scene);
   setupGameEvents(scene);
+
+  const gameObject = this.rexUI.add.roundRectangle(100, 100, 50, 50, 5, 0x0F0F0F);
+  const buttons = new Buttons(this, {
+    x: 100,
+    y: 100,
+    background: gameObject
+  });
+  this.add.existing(buttons);
 }
 
 function update() {}
