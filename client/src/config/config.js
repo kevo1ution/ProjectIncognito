@@ -35,7 +35,14 @@ const GAME = {
   obstacle: {
     guardSight: 2,
     towerSight: 5
-  }
+  },
+  levelCount: 3
+};
+
+const VIEW = {
+  START_MENU: 0,
+  LEVEL_MENU: 1,
+  GAME: 2
 };
 
 function getPhaserConfig(preload, create, update) {
@@ -47,8 +54,13 @@ function getPhaserConfig(preload, create, update) {
       preload,
       create,
       update
-    }
+    },
+    parent: "game"
   };
 }
 
-export default { getPhaserConfig, GAME: Object.freeze(GAME) };
+export default {
+  getPhaserConfig,
+  GAME: Object.freeze(GAME),
+  VIEW: Object.freeze(VIEW)
+};
