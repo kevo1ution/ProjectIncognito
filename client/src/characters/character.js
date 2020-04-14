@@ -12,7 +12,7 @@ class Character {
     this.events = new Phaser.Events.EventEmitter();
 
     this.sounds = {
-      run: scene.sound.add(spriteName + "run")
+      run: scene.sound.add(spriteName + "run"),
     };
 
     this.setupAnimations();
@@ -34,7 +34,7 @@ class Character {
   enable() {
     this.moving = false;
     this.body.setActive(true).setVisible(true);
-    this.body.anims.play("idle", true);
+    this.body.anims.play(this.spriteName + "idle", true);
   }
 
   setupAnimations() {
@@ -42,50 +42,53 @@ class Character {
     const scene = this.scene;
     const moveDuration = this.moveDuration;
     scene.anims.create({
-      key: "left",
+      key: spriteName + "left",
+      frames: [
+        { key: spriteName, frame: 7 },
+        { key: spriteName, frame: 8 },
+        { key: spriteName, frame: 10 },
+      ],
+      frameRate: 4000 / moveDuration,
+      repeat: 1,
+    });
+
+    scene.anims.create({
+      key: spriteName + "right",
       frames: [
         { key: spriteName, frame: 6 },
-        { key: spriteName, frame: 7 }
+        { key: spriteName, frame: 9 },
+        { key: spriteName, frame: 11 },
       ],
       frameRate: 4000 / moveDuration,
-      repeat: 1
+      repeat: 1,
     });
 
     scene.anims.create({
-      key: "right",
+      key: spriteName + "up",
       frames: [
-        { key: spriteName, frame: 8 },
-        { key: spriteName, frame: 9 }
-      ],
-      frameRate: 4000 / moveDuration,
-      repeat: 1
-    });
-
-    scene.anims.create({
-      key: "up",
-      frames: [
+        { key: spriteName, frame: 3 },
         { key: spriteName, frame: 4 },
-        { key: spriteName, frame: 5 }
+        { key: spriteName, frame: 5 },
       ],
       frameRate: 4000 / moveDuration,
-      repeat: 1
+      repeat: 1,
     });
 
     scene.anims.create({
-      key: "down",
+      key: spriteName + "down",
       frames: [
-        { key: spriteName, frame: 10 },
-        { key: spriteName, frame: 11 }
+        { key: spriteName, frame: 1 },
+        { key: spriteName, frame: 2 },
       ],
       frameRate: 4000 / moveDuration,
-      repeat: 1
+      repeat: 1,
     });
 
     scene.anims.create({
-      key: "idle",
+      key: spriteName + "idle",
       frames: [{ key: spriteName, frame: 0 }],
       frameRate: 4000,
-      repeat: -1
+      repeat: -1,
     });
   }
 
@@ -132,10 +135,10 @@ class Character {
       onComplete: () => {
         footTween.remove();
         footsteps.destroy();
-      }
+      },
     });
 
-    this.body.anims.play(dir, true);
+    this.body.anims.play(this.spriteName + dir, true);
     this.sounds.run.play();
   }
 
@@ -194,7 +197,7 @@ class Character {
             thisChar.events.emit("moveEnd", targetPos);
 
             res(true);
-          }
+          },
         }
       );
     });
@@ -208,7 +211,7 @@ class Character {
 
     const moved = await this.moveOnce(dir);
     if (moved) {
-      this.body.anims.play("idle", true);
+      this.body.anims.play(this.spriteName + "idle", true);
       this.sounds.run.stop();
     }
     this.moving = false;
@@ -230,6 +233,8 @@ class Character {
 
     return true;
   }
+
+  onToggle(active) {}
 
   ability() {}
 }

@@ -9,34 +9,37 @@ const GAME = {
     character: {
       demolisher: 127,
       scout: 113,
-      recon: 99
+      recon: 99,
     },
     cracked: {
       weak: 61,
-      hole: 62
-    }
+      hole: 62,
+    },
   },
   tileSize: { x: 32, y: 32 },
   sprite: {
-    size: { x: 80 / 3, y: 32 },
-    depth: 100 // render ordering for sprites
+    size: { x: 32, y: 32 },
+    depth: 100, // render ordering for sprites
   },
   characters: {
     move: {
       RIGHT: "right",
       DOWN: "down",
       LEFT: "left",
-      UP: "up"
+      UP: "up",
     },
     scout: {
-      guardAndTowerRotation: Math.PI / 2
+      guardAndTowerRotation: Math.PI / 2,
+    },
+    recon: {
+      viewRadius: 5 // can see guard 5 tiles away
     }
   },
   obstacle: {
     guardSight: 2,
-    towerSight: 5
+    towerSight: 5,
   },
-  levelCount: 3
+  levelCount: 3,
 };
 
 const VIEW = {
@@ -44,7 +47,7 @@ const VIEW = {
   LEVEL_MENU: 1,
   GAME: 2,
   LOST: 3,
-  WIN: 4
+  WIN: 4,
 };
 
 function getPhaserConfig(preload, create, update) {
@@ -55,14 +58,14 @@ function getPhaserConfig(preload, create, update) {
     scene: {
       preload,
       create,
-      update
+      update,
     },
-    parent: "game"
+    parent: "game",
   };
 }
 
 export default {
   getPhaserConfig,
   GAME: Object.freeze(GAME),
-  VIEW: Object.freeze(VIEW)
+  VIEW: Object.freeze(VIEW),
 };

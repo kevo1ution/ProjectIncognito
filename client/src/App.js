@@ -11,7 +11,7 @@ import WinMenu from "./components/WinMenu";
 function App() {
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [currentView, setCurrentView] = useState(config.VIEW.START_MENU);
-  console.log(selectedLevel);
+
   function getView() {
     switch (currentView) {
       case config.VIEW.START_MENU:

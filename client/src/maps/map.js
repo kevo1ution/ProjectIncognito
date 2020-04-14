@@ -4,6 +4,7 @@ class Map {
   constructor(scene) {
     this.startPos = {};
     this.scene = scene;
+    this.guardRevealPos = { x: -100, y: -100 };
   }
 
   reset() {
@@ -19,7 +20,7 @@ class Map {
     this.map = this.scene.make.tilemap({
       key: mapKey,
       tileWidth: config.GAME.tileSize.x,
-      tileHeight: config.GAME.tileSize.y
+      tileHeight: config.GAME.tileSize.y,
     });
 
     this.tileset = this.map.addTilesetImage("tilesBackground");
@@ -31,7 +32,7 @@ class Map {
       cracked: this.map.createDynamicLayer("crackedLayer", this.tileset),
       light: this.map.createDynamicLayer("lightLayer", this.tileset),
       win: this.map.createDynamicLayer("winLayer", this.tileset),
-      start: this.map.createDynamicLayer("startLayer", this.tileset)
+      start: this.map.createDynamicLayer("startLayer", this.tileset),
     };
 
     this.setupLightLayer();
@@ -83,16 +84,25 @@ class Map {
     this.layers.light.replaceByIndex(config.GAME.tileIndex.light, -1);
     this.layers.light.alpha = 0.5;
 
-    const guardTiles = this.layers.guard.filterTiles(tile => {
+    const guardTiles = this.layers.guard.filterTiles((tile) => {
       return tile.index === config.GAME.tileIndex.guard;
     });
 
-    const towerTiles = this.layers.guard.filterTiles(tile => {
+    const towerTiles = this.layers.guard.filterTiles((tile) => {
       return tile.index === config.GAME.tileIndex.tower;
     });
 
     let isPlrSeen = false;
-    guardTiles.forEach(tile => {
+    guardTiles.forEach((tile) => {
+      const xdiff = tile.x - this.guardRevealPos.x;
+      const ydiff = tile.y - this.guardRevealPos.y;
+      if (
+        Math.sqrt(xdiff * xdiff + ydiff * ydiff) >
+        config.GAME.characters.recon.viewRadius
+      ) {
+        return;
+      }
+
       isPlrSeen =
         isPlrSeen ||
         this.lightUp(
@@ -103,7 +113,7 @@ class Map {
         );
     });
 
-    towerTiles.forEach(tile => {
+    towerTiles.forEach((tile) => {
       isPlrSeen =
         isPlrSeen ||
         this.lightUp(
@@ -120,9 +130,9 @@ class Map {
   setupStartPos() {
     this.layers.start.setVisible(false);
 
-    Object.keys(config.GAME.tileIndex.character).forEach(key => {
+    Object.keys(config.GAME.tileIndex.character).forEach((key) => {
       const tile = this.layers.start.findTile(
-        tile => tile.index === config.GAME.tileIndex.character[key]
+        (tile) => tile.index === config.GAME.tileIndex.character[key]
       );
 
       if (tile) {
@@ -177,6 +187,19 @@ class Map {
     if (isPlrSeen) {
       this.scene.events.emit("lose");
     }
+  }
+
+  showGuards(posWorld) {
+    this.guardRevealPos = this.layers.guard.worldToTileXY(
+      posWorld.x,
+      posWorld.y
+    );
+    this.setupLightLayer();
+  }
+
+  hideGuards() {
+    this.guardRevealPos = { x: -100, y: -100 };
+    this.setupLightLayer();
   }
 
   breakWeakTerrain(posWorld) {
@@ -254,7 +277,7 @@ class Map {
     const tile = this.layers.moveable.getTileAtWorldXY(posWorld.x, posWorld.y);
     const targetPos = {
       x: tile.x + diff.x,
-      y: tile.y + diff.y
+      y: tile.y + diff.y,
     };
     const moveTween = this.scene.tweens.add({
       pixelX: targetPos.x * config.GAME.tileSize.x,
@@ -265,7 +288,7 @@ class Map {
         moveTween.remove();
         this.layers.moveable.putTileAt(tile.index, targetPos.x, targetPos.y);
         this.layers.moveable.removeTileAt(tile.x, tile.y);
-      }
+      },
     });
   }
 }

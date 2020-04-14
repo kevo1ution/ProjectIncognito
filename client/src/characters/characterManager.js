@@ -14,7 +14,7 @@ class CharacterManager {
   }
 
   reset() {
-    Object.keys(this.loadedCharacters).forEach(charName => {
+    Object.keys(this.loadedCharacters).forEach((charName) => {
       this.loadedCharacters[charName].disable();
     });
   }
@@ -28,7 +28,7 @@ class CharacterManager {
         scene,
         {
           x: 100,
-          y: 500
+          y: 500,
         },
         this
       ),
@@ -38,7 +38,7 @@ class CharacterManager {
         scene,
         {
           x: 0,
-          y: 0
+          y: 0,
         },
         this
       ),
@@ -48,10 +48,10 @@ class CharacterManager {
         scene,
         {
           x: 0,
-          y: 0
+          y: 0,
         },
         this
-      )
+      ),
     };
 
     this.reset();
@@ -63,7 +63,7 @@ class CharacterManager {
     const scene = this.scene;
     const map = scene.map;
     this.characters = [];
-    Object.keys(this.loadedCharacters).forEach(charName => {
+    Object.keys(this.loadedCharacters).forEach((charName) => {
       const pos = map.startPos[charName];
       if (pos) {
         const char = this.loadedCharacters[charName];
@@ -80,18 +80,22 @@ class CharacterManager {
   }
 
   removeCharacterInLineup(character) {
-    this.characters = this.characters.filter(char => char !== character);
+    this.characters = this.characters.filter((char) => char !== character);
     this.curCharIndex %= this.characters.length;
     character.disable();
   }
 
   toggleCharacter() {
+    this.getCurrentCharacter().onToggle(false);
+
     this.curCharIndex++;
     this.curCharIndex = this.curCharIndex % this.characters.length;
+
+    this.getCurrentCharacter().onToggle(true);
   }
 
   getCharacterXY(targetPos) {
-    return this.characters.find(character => {
+    return this.characters.find((character) => {
       const tilePos = this.scene.map.map.worldToTileXY(
         character.body.x,
         character.body.y
@@ -102,7 +106,7 @@ class CharacterManager {
 
   getCharacterWorldXY(targetPos) {
     return this.characters.find(
-      character =>
+      (character) =>
         character.body.x === targetPos.x && character.body.y === targetPos.y
     );
   }
