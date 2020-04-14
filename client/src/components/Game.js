@@ -33,7 +33,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
   function setupKeyboardEvents(scene) {
     scene.input.keyboard.on(
       "keydown-R",
-      function(event) {
+      function (event) {
         restartGame(selectedLevel, setSelectedLevel, setCurrentView);
       },
       scene
@@ -41,14 +41,14 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
 
     scene.input.keyboard.on(
       "keydown-SPACE",
-      function(event) {
+      function (event) {
         scene.characterManager.toggleCharacter();
       },
       scene
     );
     scene.input.keyboard.on(
       "keydown-W",
-      function(event) {
+      function (event) {
         const char = scene.characterManager.getCurrentCharacter();
         if (char) {
           char.move(config.GAME.characters.move.UP);
@@ -58,7 +58,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     );
     scene.input.keyboard.on(
       "keydown-A",
-      function(event) {
+      function (event) {
         const char = scene.characterManager.getCurrentCharacter();
         if (char) {
           char.move(config.GAME.characters.move.LEFT);
@@ -68,7 +68,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     );
     scene.input.keyboard.on(
       "keydown-S",
-      function(event) {
+      function (event) {
         const char = scene.characterManager.getCurrentCharacter();
         if (char) {
           char.move(config.GAME.characters.move.DOWN);
@@ -78,7 +78,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     );
     scene.input.keyboard.on(
       "keydown-D",
-      function(event) {
+      function (event) {
         const char = scene.characterManager.getCurrentCharacter();
         if (char) {
           char.move(config.GAME.characters.move.RIGHT);
@@ -88,7 +88,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     );
     scene.input.keyboard.on(
       "keydown-F",
-      function(event) {
+      function (event) {
         const char = scene.characterManager.getCurrentCharacter();
         if (char) {
           char.ability();
@@ -106,15 +106,15 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     );
     this.load.spritesheet("demolisher", "assets/demolisher.png", {
       frameWidth: config.GAME.sprite.size.x,
-      frameHeight: config.GAME.sprite.size.y
+      frameHeight: config.GAME.sprite.size.y,
     });
     this.load.spritesheet("recon", "assets/recon.png", {
       frameWidth: config.GAME.sprite.size.x,
-      frameHeight: config.GAME.sprite.size.y
+      frameHeight: config.GAME.sprite.size.y,
     });
     this.load.spritesheet("scout", "assets/demolisher.png", {
       frameWidth: config.GAME.sprite.size.x,
-      frameHeight: config.GAME.sprite.size.y
+      frameHeight: config.GAME.sprite.size.y,
     });
 
     this.load.audio("demolisherrun", "assets/run.wav");

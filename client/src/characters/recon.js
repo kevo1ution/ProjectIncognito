@@ -1,6 +1,17 @@
 import Character from "./character";
 
 class Recon extends Character {
+  constructor(spriteName, moveDuration, scene, startPos, characterManager) {
+    super(spriteName, moveDuration, scene, startPos, characterManager);
+    this.events.addListener(
+      "moveEnd",
+      () => {
+        this.scene.map.setupLightLayer();
+      },
+      this
+    );
+  }
+
   setupAnimations() {
     const spriteName = this.spriteName;
     const scene = this.scene;
@@ -55,10 +66,7 @@ class Recon extends Character {
 
   onToggle(active) {
     if (active) {
-      this.scene.map.showGuards({
-        x: this.body.x,
-        y: this.body.y,
-      });
+      this.scene.map.showGuards();
     } else {
       this.scene.map.hideGuards();
     }

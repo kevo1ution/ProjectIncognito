@@ -32,7 +32,7 @@ const GAME = {
       guardAndTowerRotation: Math.PI / 2,
     },
     recon: {
-      viewRadius: 5 // can see guard 5 tiles away
+      viewRadius: 4 // can see guard 5 tiles away
     }
   },
   obstacle: {

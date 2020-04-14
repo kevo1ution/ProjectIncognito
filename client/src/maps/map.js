@@ -4,7 +4,7 @@ class Map {
   constructor(scene) {
     this.startPos = {};
     this.scene = scene;
-    this.guardRevealPos = { x: -100, y: -100 };
+    this.guardRevealPos = false;
   }
 
   reset() {
@@ -98,14 +98,24 @@ class Map {
 
     let isPlrSeen = false;
     guardTiles.forEach((tile) => {
-      const xdiff = tile.x - this.guardRevealPos.x;
-      const ydiff = tile.y - this.guardRevealPos.y;
-      let alpha = 1;
+      const recon = this.scene.characterManager.getCurrentCharacter();
+      let distFromGuard = -1;
+      let alpha = 0;
+      if (recon) {
+        const bodyPos = this.layers.guard.worldToTileXY(
+          recon.body.x,
+          recon.body.y
+        );
+        const xdiff = tile.x - bodyPos.x;
+        const ydiff = tile.y - bodyPos.y;
+        distFromGuard = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
+      }
+
       if (
-        Math.sqrt(xdiff * xdiff + ydiff * ydiff) >
-        config.GAME.characters.recon.viewRadius
+        this.guardRevealPos &&
+        distFromGuard <= config.GAME.characters.recon.viewRadius
       ) {
-        alpha = 0;
+        alpha = 1;
       }
 
       tile.setAlpha(alpha);
@@ -198,15 +208,12 @@ class Map {
   }
 
   showGuards(posWorld) {
-    this.guardRevealPos = this.layers.guard.worldToTileXY(
-      posWorld.x,
-      posWorld.y
-    );
+    this.guardRevealPos = true;
     this.setupLightLayer();
   }
 
   hideGuards() {
-    this.guardRevealPos = { x: -100, y: -100 };
+    this.guardRevealPos = false;
     this.setupLightLayer();
   }
 
