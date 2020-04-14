@@ -42,7 +42,7 @@ class Map {
     this.scene.characterManager.setupCharacters();
   }
 
-  lightUp(pos, dir, num, tileIndex) {
+  lightUp(pos, dir, num, tileIndex, alpha = 1) {
     const finalPos = { ...pos };
     switch (dir) {
       case 0: // right
@@ -66,6 +66,7 @@ class Map {
     }
 
     let isPlrSeen = false;
+
     for (let x = pos.x; x <= finalPos.x; x++) {
       for (let y = pos.y; y <= finalPos.y; y++) {
         isPlrSeen =
@@ -73,6 +74,9 @@ class Map {
         if (this.layers.light.getTileAt(x, y) === null) {
           this.layers.light.putTileAt(tileIndex, x, y);
         }
+
+        const lightTile = this.layers.light.getTileAt(x, y);
+        lightTile.setAlpha(alpha);
       }
     }
 
@@ -96,12 +100,15 @@ class Map {
     guardTiles.forEach((tile) => {
       const xdiff = tile.x - this.guardRevealPos.x;
       const ydiff = tile.y - this.guardRevealPos.y;
+      let alpha = 1;
       if (
         Math.sqrt(xdiff * xdiff + ydiff * ydiff) >
         config.GAME.characters.recon.viewRadius
       ) {
-        return;
+        alpha = 0;
       }
+
+      tile.setAlpha(alpha);
 
       isPlrSeen =
         isPlrSeen ||
@@ -109,7 +116,8 @@ class Map {
           { x: tile.x, y: tile.y },
           tile.rotation,
           config.GAME.obstacle.guardSight,
-          config.GAME.tileIndex.light
+          config.GAME.tileIndex.light,
+          alpha
         );
     });
 
