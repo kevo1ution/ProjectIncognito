@@ -73,6 +73,8 @@ class CharacterManager {
         char.enable();
       }
     });
+
+    this.getCurrentCharacter().onToggle(true);
   }
 
   didWin() {
@@ -86,12 +88,14 @@ class CharacterManager {
   }
 
   toggleCharacter() {
-    this.getCurrentCharacter().onToggle(false);
-
+    const lastIndex = this.curCharIndex;
     this.curCharIndex++;
     this.curCharIndex = this.curCharIndex % this.characters.length;
 
-    this.getCurrentCharacter().onToggle(true);
+    if (lastIndex !== this.curCharIndex) {
+      this.characters[lastIndex].onToggle(false);
+      this.getCurrentCharacter().onToggle(true);
+    }
   }
 
   getCharacterXY(targetPos) {

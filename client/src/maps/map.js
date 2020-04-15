@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import config from "../config/config";
 
 class Map {
@@ -76,7 +77,9 @@ class Map {
         }
 
         const lightTile = this.layers.light.getTileAt(x, y);
-        lightTile.setAlpha(alpha);
+        if (lightTile) {
+          lightTile.setAlpha(alpha);
+        }
       }
     }
 
@@ -98,25 +101,7 @@ class Map {
 
     let isPlrSeen = false;
     guardTiles.forEach((tile) => {
-      const recon = this.scene.characterManager.getCurrentCharacter();
-      let distFromGuard = -1;
       let alpha = 0;
-      if (recon) {
-        const bodyPos = this.layers.guard.worldToTileXY(
-          recon.body.x,
-          recon.body.y
-        );
-        const xdiff = tile.x - bodyPos.x;
-        const ydiff = tile.y - bodyPos.y;
-        distFromGuard = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
-      }
-
-      if (
-        this.guardRevealPos &&
-        distFromGuard <= config.GAME.characters.recon.viewRadius
-      ) {
-        alpha = 1;
-      }
 
       tile.setAlpha(alpha);
 
@@ -207,14 +192,46 @@ class Map {
     }
   }
 
-  showGuards(posWorld) {
-    this.guardRevealPos = true;
-    this.setupLightLayer();
-  }
+  lightupGuards(posWorld, radius, pulseDate) {
+    const map = this;
+    const guardTiles = map.layers.guard.filterTiles((tile) => {
+      return tile.index === config.GAME.tileIndex.guard;
+    });
 
-  hideGuards() {
-    this.guardRevealPos = false;
-    this.setupLightLayer();
+    guardTiles.forEach((tile) => {
+      const tileWorldPos = map.layers.guard.tileToWorldXY(tile.x, tile.y);
+      const xdiff = tileWorldPos.x - posWorld.x;
+      const ydiff = tileWorldPos.y - posWorld.y;
+      const distFromGuard = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
+
+      if (pulseDate != tile.lastPulse && distFromGuard <= radius) {
+        if (tile.currentTween) {
+          tile.currentTween.remove();
+        }
+
+        tile.lastPulse = pulseDate;
+        tile.setAlpha(1);
+        tile.currentTween = map.scene.tweens.add({
+          targets: tile,
+          alpha: 0,
+          duration: config.GAME.characters.recon.guardFadeTime,
+          ease: Phaser.Math.Easing.Expo,
+          onUpdate: () => {
+            map.lightUp(
+              { x: tile.x, y: tile.y },
+              tile.rotation,
+              config.GAME.obstacle.guardSight,
+              config.GAME.tileIndex.light,
+              tile.alpha
+            );
+          },
+          onComplete: () => {
+            tile.currentTween.remove();
+            tile.currentTween = null;
+          },
+        });
+      }
+    });
   }
 
   breakWeakTerrain(posWorld) {

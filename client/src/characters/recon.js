@@ -1,15 +1,13 @@
 import Character from "./character";
+import config from "../config/config";
+import * as Promise from "bluebird";
+Promise.config({ cancellation: true });
 
 class Recon extends Character {
   constructor(spriteName, moveDuration, scene, startPos, characterManager) {
     super(spriteName, moveDuration, scene, startPos, characterManager);
-    this.events.addListener(
-      "moveEnd",
-      () => {
-        this.scene.map.setupLightLayer();
-      },
-      this
-    );
+
+    this.scanPromise = null;
   }
 
   setupAnimations() {
@@ -64,11 +62,71 @@ class Recon extends Character {
     });
   }
 
+  startScan() {
+    const scene = this.scene;
+    const body = this.body;
+    let curPromise = null;
+    let active = true;
+    let arc = scene.add.arc(body.x, body.y);
+
+    async function setupRadar() {
+      while (active) {
+        arc.setStrokeStyle(5, 0x101010, 1);
+        arc.setRadius(9);
+        curPromise = new Promise((res, rej, onCancel) => {
+          const pulseDate = new Date().getTime();
+          let radarTween = scene.tweens.add({
+            radius:
+              config.GAME.tileSize.x * config.GAME.characters.recon.viewRadius,
+            strokeAlpha: 0,
+            targets: arc,
+            duration: config.GAME.characters.recon.viewRadiusExpansionTime,
+            onUpdate: () => {
+              scene.map.lightupGuards(
+                { x: body.x, y: body.y },
+                arc.radius,
+                pulseDate
+              );
+              arc.setPosition(body.x, body.y);
+            },
+            onComplete: () => {
+              if (!radarTween) {
+                return;
+              }
+              radarTween.remove();
+              res();
+            },
+          });
+
+          onCancel(() => {
+            radarTween.remove();
+          });
+        });
+
+        await curPromise;
+      }
+    }
+
+    this.scanPromise = new Promise((res, rej, onCancel) => {
+      setupRadar();
+      onCancel(() => {
+        if (curPromise) {
+          curPromise.cancel();
+        }
+        active = false;
+        arc.destroy();
+      });
+    });
+  }
+
   onToggle(active) {
     if (active) {
-      this.scene.map.showGuards();
+      this.startScan();
     } else {
-      this.scene.map.hideGuards();
+      if (this.scanPromise) {
+        this.scanPromise.cancel();
+      }
+      this.scene.map.setupLightLayer();
     }
   }
 }

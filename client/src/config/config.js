@@ -32,8 +32,10 @@ const GAME = {
       guardAndTowerRotation: Math.PI / 2,
     },
     recon: {
-      viewRadius: 4 // can see guard 5 tiles away
-    }
+      viewRadius: 4, // can see guard 4 tiles away
+      viewRadiusExpansionTime: 1500, // 4 seconds for radius ring to expand to full size
+      guardFadeTime: 2000, // 4 seconds and guard dissappears
+    },
   },
   obstacle: {
     guardSight: 2,
