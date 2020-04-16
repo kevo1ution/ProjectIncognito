@@ -81,7 +81,7 @@ class Scout extends Character {
     await this.moveOnce(dir);
     if (moved) {
       this.body.anims.play(this.spriteName + "idle", true);
-      this.sounds.run.stop();
+      this.sounds.run.pause();
     }
     this.moving = false;
   }
