@@ -112,7 +112,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y,
     });
-    this.load.spritesheet("scout", "assets/demolisher.png", {
+    this.load.spritesheet("scout", "assets/scout.png", {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y,
     });
