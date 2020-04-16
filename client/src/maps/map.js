@@ -204,7 +204,7 @@ class Map {
       const ydiff = tileWorldPos.y - posWorld.y;
       const distFromGuard = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
 
-      if (pulseDate != tile.lastPulse && distFromGuard <= radius) {
+      if (pulseDate !== tile.lastPulse && distFromGuard <= radius) {
         if (tile.currentTween) {
           tile.currentTween.remove();
         }

@@ -139,7 +139,12 @@ class Character {
     });
 
     this.body.anims.play(this.spriteName + dir, true);
-    this.sounds.run.play();
+
+    if(this.sounds.run.isPaused){
+      this.sounds.run.resume();
+    }else{
+      this.sounds.run.play();
+    }
   }
 
   moveEndEffects(targetPos) {
@@ -212,7 +217,7 @@ class Character {
     const moved = await this.moveOnce(dir);
     if (moved) {
       this.body.anims.play(this.spriteName + "idle", true);
-      this.sounds.run.stop();
+      this.sounds.run.pause();
     }
     this.moving = false;
   }
