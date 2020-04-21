@@ -32,14 +32,6 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
 
   function setupKeyboardEvents(scene) {
     scene.input.keyboard.on(
-      "keydown-R",
-      function (event) {
-        restartGame(selectedLevel, setSelectedLevel, setCurrentView);
-      },
-      scene
-    );
-
-    scene.input.keyboard.on(
       "keydown-SPACE",
       function (event) {
         scene.characterManager.toggleCharacter();
