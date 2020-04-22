@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.js": "/ProjectIncognito/static/js/main.8d637a52.chunk.js",
-    "main.js.map": "/ProjectIncognito/static/js/main.8d637a52.chunk.js.map",
+    "main.js": "/ProjectIncognito/static/js/main.f3d899d6.chunk.js",
+    "main.js.map": "/ProjectIncognito/static/js/main.f3d899d6.chunk.js.map",
     "runtime-main.js": "/ProjectIncognito/static/js/runtime-main.72de92b7.js",
     "runtime-main.js.map": "/ProjectIncognito/static/js/runtime-main.72de92b7.js.map",
     "static/css/2.47e06e2e.chunk.css": "/ProjectIncognito/static/css/2.47e06e2e.chunk.css",
-    "static/js/2.a89f1cbb.chunk.js": "/ProjectIncognito/static/js/2.a89f1cbb.chunk.js",
-    "static/js/2.a89f1cbb.chunk.js.map": "/ProjectIncognito/static/js/2.a89f1cbb.chunk.js.map",
+    "static/js/2.a60a4293.chunk.js": "/ProjectIncognito/static/js/2.a60a4293.chunk.js",
+    "static/js/2.a60a4293.chunk.js.map": "/ProjectIncognito/static/js/2.a60a4293.chunk.js.map",
     "index.html": "/ProjectIncognito/index.html",
-    "precache-manifest.3a1f6260288e0317c94889242fabfc03.js": "/ProjectIncognito/precache-manifest.3a1f6260288e0317c94889242fabfc03.js",
+    "precache-manifest.2f19e2c341fec2fb727aea3b612437e3.js": "/ProjectIncognito/precache-manifest.2f19e2c341fec2fb727aea3b612437e3.js",
     "service-worker.js": "/ProjectIncognito/service-worker.js",
     "static/css/2.47e06e2e.chunk.css.map": "/ProjectIncognito/static/css/2.47e06e2e.chunk.css.map",
-    "static/js/2.a89f1cbb.chunk.js.LICENSE": "/ProjectIncognito/static/js/2.a89f1cbb.chunk.js.LICENSE"
+    "static/js/2.a60a4293.chunk.js.LICENSE": "/ProjectIncognito/static/js/2.a60a4293.chunk.js.LICENSE"
   },
   "entrypoints": [
     "static/js/runtime-main.72de92b7.js",
     "static/css/2.47e06e2e.chunk.css",
-    "static/js/2.a89f1cbb.chunk.js",
-    "static/js/main.8d637a52.chunk.js"
+    "static/js/2.a60a4293.chunk.js",
+    "static/js/main.f3d899d6.chunk.js"
   ]
 }
