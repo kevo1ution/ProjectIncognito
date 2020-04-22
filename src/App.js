@@ -7,39 +7,11 @@ import StartMenu from "./components/StartMenu";
 import LevelMenu from "./components/LevelMenu";
 import LostMenu from "./components/LostMenu";
 import WinMenu from "./components/WinMenu";
-import useAudio from "./util/useAudio";
+import SongPlayer from "./components/SongPlayer";
 
 function App() {
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [currentView, setCurrentView] = useState(config.VIEW.START_MENU);
-  const [songPlayers, toggleSong] = useAudio(config.SONGS.RAW);
-
-  function playSong(song) {
-    if (!songPlayers[song].playing) {
-      toggleSong(song)();
-    }
-  }
-
-  // play song based on current view
-  switch (currentView) {
-    case config.VIEW.START_MENU:
-      playSong(config.SONGS.mainmenu);
-      break;
-    case config.VIEW.LEVEL_MENU:
-      playSong(config.SONGS.mainmenu);
-      break;
-    case config.VIEW.GAME:
-      playSong(config.SONGS.ingame);
-      break;
-    case config.VIEW.LOST:
-      playSong(config.SONGS.mainmenu);
-      break;
-    case config.VIEW.WIN:
-      playSong(config.SONGS.win);
-      break;
-    default:
-      throw Error("Invalid View: " + currentView);
-  }
 
   function getView() {
     switch (currentView) {
@@ -72,6 +44,48 @@ function App() {
     }
   }
 
+  function getSongPlayer() {
+    switch (currentView) {
+      case config.VIEW.START_MENU:
+        return (
+          <SongPlayer
+            urls={config.SONGS.RAW}
+            songIndex={config.SONGS.mainmenu}
+          ></SongPlayer>
+        );
+      case config.VIEW.LEVEL_MENU:
+        return (
+          <SongPlayer
+            urls={config.SONGS.RAW}
+            songIndex={config.SONGS.mainmenu}
+          ></SongPlayer>
+        );
+      case config.VIEW.GAME:
+        return (
+          <SongPlayer
+            urls={config.SONGS.RAW}
+            songIndex={config.SONGS.ingame}
+          ></SongPlayer>
+        );
+      case config.VIEW.LOST:
+        return (
+          <SongPlayer
+            urls={config.SONGS.RAW}
+            songIndex={config.SONGS.mainmenu}
+          ></SongPlayer>
+        );
+      case config.VIEW.WIN:
+        return (
+          <SongPlayer
+            urls={config.SONGS.RAW}
+            songIndex={config.SONGS.win}
+          ></SongPlayer>
+        );
+      default:
+        throw Error("Invalid View: " + currentView);
+    }
+  }
+
   return (
     // displayflex, justify content, align items, hieight 100, width 100
     <div
@@ -86,6 +100,7 @@ function App() {
       }}
     >
       <div id="game"></div>
+      {getSongPlayer()}
       {getView()}
     </div>
   );
