@@ -53,14 +53,9 @@ const VIEW = {
 };
 
 const SONGS = {
-  RAW: [
-    "assets/soundtrack/mainmenu.mp3",
-    "assets/soundtrack/gameplay.mp3",
-    "assets/soundtrack/winsong.mp3",
-  ],
-  mainmenu: 0,
-  ingame: 1,
-  win: 2,
+  mainmenu: "assets/soundtrack/mainmenu.mp3",
+  ingame: "assets/soundtrack/gameplay.mp3",
+  win: "assets/soundtrack/winsong.mp3",
 };
 
 function getPhaserConfig(preload, create, update) {

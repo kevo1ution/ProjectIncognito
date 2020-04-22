@@ -7,7 +7,6 @@ import StartMenu from "./components/StartMenu";
 import LevelMenu from "./components/LevelMenu";
 import LostMenu from "./components/LostMenu";
 import WinMenu from "./components/WinMenu";
-import SongPlayer from "./components/SongPlayer";
 
 function App() {
   const [selectedLevel, setSelectedLevel] = useState(1);
@@ -44,43 +43,18 @@ function App() {
     }
   }
 
-  function getSongPlayer() {
+  function getCurrentSong() {
     switch (currentView) {
       case config.VIEW.START_MENU:
-        return (
-          <SongPlayer
-            urls={config.SONGS.RAW}
-            songIndex={config.SONGS.mainmenu}
-          ></SongPlayer>
-        );
+        return config.SONGS.mainmenu;
       case config.VIEW.LEVEL_MENU:
-        return (
-          <SongPlayer
-            urls={config.SONGS.RAW}
-            songIndex={config.SONGS.mainmenu}
-          ></SongPlayer>
-        );
+        return config.SONGS.mainmenu;
       case config.VIEW.GAME:
-        return (
-          <SongPlayer
-            urls={config.SONGS.RAW}
-            songIndex={config.SONGS.ingame}
-          ></SongPlayer>
-        );
+        return config.SONGS.ingame;
       case config.VIEW.LOST:
-        return (
-          <SongPlayer
-            urls={config.SONGS.RAW}
-            songIndex={config.SONGS.mainmenu}
-          ></SongPlayer>
-        );
+        return config.SONGS.mainmenu;
       case config.VIEW.WIN:
-        return (
-          <SongPlayer
-            urls={config.SONGS.RAW}
-            songIndex={config.SONGS.win}
-          ></SongPlayer>
-        );
+        return config.SONGS.win;
       default:
         throw Error("Invalid View: " + currentView);
     }
@@ -100,8 +74,8 @@ function App() {
       }}
     >
       <div id="game"></div>
-      {getSongPlayer()}
       {getView()}
+      <audio src={getCurrentSong()} autoPlay loop></audio>
     </div>
   );
 }
