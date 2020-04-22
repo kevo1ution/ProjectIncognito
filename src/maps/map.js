@@ -10,6 +10,7 @@ class Map {
       terrainBreaking: scene.sound.add("terrainBreaking", {
         volume: 0.1,
       }),
+      rotateEnemy: scene.sound.add("rotateEnemy")
     };
   }
 
@@ -176,6 +177,7 @@ class Map {
       return;
     }
 
+    this.sounds.rotateEnemy.play();
     if (guardOrTowerTile.index === config.GAME.tileIndex.guard) {
       guardOrTowerTile.rotation +=
         config.GAME.characters.scout.guardAndTowerRotation;

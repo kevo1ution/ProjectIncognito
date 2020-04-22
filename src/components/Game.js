@@ -113,6 +113,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     this.load.audio("reconrun", "assets/soundFX/run.mp3");
     this.load.audio("scoutrun", "assets/soundFX/run.mp3");
     this.load.audio("terrainBreaking", "assets/soundFX/terrainbreaking.mp3");
+    this.load.audio("rotateEnemy", "assets/soundFX/rotate.mp3");
     this.load.image("footsteps", "assets/footsteps.png");
   }
 
