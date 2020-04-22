@@ -75,7 +75,14 @@ function App() {
     >
       <div id="game"></div>
       {getView()}
-      <audio src={getCurrentSong()} autoPlay loop></audio>
+      <audio
+        ref={(ref) => {
+          if (ref) ref.volume = 0.15;
+        }}
+        src={getCurrentSong()}
+        autoPlay
+        loop
+      ></audio>
     </div>
   );
 }
