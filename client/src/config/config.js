@@ -52,6 +52,17 @@ const VIEW = {
   WIN: 4,
 };
 
+const SONGS = {
+  RAW: [
+    "assets/soundtrack/mainmenu.mp3",
+    "assets/soundtrack/gameplay.mp3",
+    "assets/soundtrack/winsong.mp3",
+  ],
+  mainmenu: 0,
+  ingame: 1,
+  win: 2,
+};
+
 function getPhaserConfig(preload, create, update) {
   return {
     type: Phaser.AUTO,
@@ -70,4 +81,5 @@ export default {
   getPhaserConfig,
   GAME: Object.freeze(GAME),
   VIEW: Object.freeze(VIEW),
+  SONGS: Object.freeze(SONGS),
 };
