@@ -109,9 +109,10 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
       frameHeight: config.GAME.sprite.size.y,
     });
 
-    this.load.audio("demolisherrun", "assets/run.mp3");
-    this.load.audio("reconrun", "assets/run.mp3");
-    this.load.audio("scoutrun", "assets/run.mp3");
+    this.load.audio("demolisherrun", "assets/soundFX/run.mp3");
+    this.load.audio("reconrun", "assets/soundFX/run.mp3");
+    this.load.audio("scoutrun", "assets/soundFX/run.mp3");
+    this.load.audio("terrainBreaking", "assets/soundFX/terrainbreaking.mp3");
     this.load.image("footsteps", "assets/footsteps.png");
   }
 

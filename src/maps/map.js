@@ -6,6 +6,11 @@ class Map {
     this.startPos = {};
     this.scene = scene;
     this.guardRevealPos = false;
+    this.sounds = {
+      terrainBreaking: scene.sound.add("terrainBreaking", {
+        volume: 0.1,
+      }),
+    };
   }
 
   reset() {
@@ -235,6 +240,9 @@ class Map {
   }
 
   breakWeakTerrain(posWorld) {
+    this.sounds.terrainBreaking.play({
+      seek: 0.4,
+    });
     this.layers.cracked.removeTileAtWorldXY(posWorld.x, posWorld.y);
     this.layers.cracked.putTileAtWorldXY(
       config.GAME.tileIndex.cracked.hole,
