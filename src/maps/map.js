@@ -10,7 +10,7 @@ class Map {
       terrainBreaking: scene.sound.add("terrainBreaking", {
         volume: 0.1,
       }),
-      rotateEnemy: scene.sound.add("rotateEnemy")
+      rotateEnemy: scene.sound.add("rotateEnemy"),
     };
   }
 
@@ -41,6 +41,58 @@ class Map {
       win: this.map.createDynamicLayer("winLayer", this.tileset),
       start: this.map.createDynamicLayer("startLayer", this.tileset),
     };
+
+    // setup guard sprites
+    this.layers.guard
+      .filterTiles((tile) => {
+        return tile.index === config.GAME.tileIndex.guard;
+      })
+      .forEach((guardTile) => {
+        const pos = this.layers.guard.tileToWorldXY(guardTile.x, guardTile.y);
+        guardTile.body = this.scene.add.sprite(
+          pos.x + config.GAME.tileSize.x / 2,
+          pos.y + config.GAME.tileSize.y / 2,
+          "guard"
+        );
+        guardTile.body.alpha = 0;
+        guardTile.setAlpha(0);
+      });
+
+    this.scene.anims.create({
+      key: "guardleft",
+      frames: [
+        { key: "guard", frame: 3 },
+      ],
+      frameRate: 4000 / 1,
+      repeat: 1,
+    });
+
+    this.scene.anims.create({
+      key: "guardright",
+      frames: [
+        { key: "guard", frame: 2 },
+      ],
+      frameRate: 4000 / 1,
+      repeat: 1,
+    });
+
+    this.scene.anims.create({
+      key: "guardup",
+      frames: [
+        { key: "guard", frame: 1 },
+      ],
+      frameRate: 4000 / 1,
+      repeat: 1,
+    });
+
+    this.scene.anims.create({
+      key: "guarddown",
+      frames: [
+        { key: "guard", frame: 0 },
+      ],
+      frameRate: 4000 / 1,
+      repeat: 1,
+    });
 
     this.setupLightLayer();
     this.setupStartPos();
@@ -107,9 +159,22 @@ class Map {
 
     let isPlrSeen = false;
     guardTiles.forEach((tile) => {
-      let alpha = 0;
-
-      tile.setAlpha(alpha);
+      switch (tile.rotation) {
+        case 0: // right
+          tile.body.anims.play("guardright", true);
+          break;
+        case Math.PI / 2: // down
+          tile.body.anims.play("guarddown", true);
+          break;
+        case Math.PI: // left
+          tile.body.anims.play("guardleft", true);
+          break;
+        case (Math.PI * 3) / 2: // up
+          tile.body.anims.play("guardup", true);
+          break;
+        default:
+          throw Error("Invalid direction!");
+      }
 
       isPlrSeen =
         isPlrSeen ||
@@ -118,7 +183,7 @@ class Map {
           tile.rotation,
           config.GAME.obstacle.guardSight,
           config.GAME.tileIndex.light,
-          alpha
+          0
         );
     });
 
@@ -217,9 +282,9 @@ class Map {
         }
 
         tile.lastPulse = pulseDate;
-        tile.setAlpha(1);
+        tile.body.alpha = 1;
         tile.currentTween = map.scene.tweens.add({
-          targets: tile,
+          targets: tile.body,
           alpha: 0,
           duration: config.GAME.characters.recon.guardFadeTime,
           ease: Phaser.Math.Easing.Expo,
@@ -229,7 +294,7 @@ class Map {
               tile.rotation,
               config.GAME.obstacle.guardSight,
               config.GAME.tileIndex.light,
-              tile.alpha
+              tile.body.alpha
             );
           },
           onComplete: () => {

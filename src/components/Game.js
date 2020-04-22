@@ -108,6 +108,10 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y,
     });
+    this.load.spritesheet("guard", "assets/enemy.png", {
+      frameWidth: config.GAME.sprite.size.x,
+      frameHeight: config.GAME.sprite.size.y,
+    });    
 
     this.load.audio("demolisherrun", "assets/soundFX/run.mp3");
     this.load.audio("reconrun", "assets/soundFX/run.mp3");
