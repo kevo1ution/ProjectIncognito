@@ -111,7 +111,7 @@ class CharacterManager {
       "downarrow"
     );
     arrow.setScale(0.3, 0.3);
-    arrow.setDepth(0);
+    arrow.setDepth(1000);
 
     const arrowTween = this.scene.tweens.add({
       alpha: 1,
