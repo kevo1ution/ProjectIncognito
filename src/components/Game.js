@@ -25,6 +25,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
       }
     });
 
+    const caughtSound = scene.sound.add("gotcaught");
     scene.events.addListener("lose", (reason) => {
       scene.input.keyboard.removeAllListeners();
 
@@ -35,6 +36,9 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
           config.GAME.tileSize.x * 3,
           0
         );
+
+        caughtSound.play();
+
         setTimeout(() => {
           setCurrentView(config.VIEW.LOST);
         }, 1000);
@@ -132,6 +136,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     this.load.audio("scoutrun", "assets/soundFX/run.mp3");
     this.load.audio("terrainBreaking", "assets/soundFX/terrainbreaking.mp3");
     this.load.audio("rotateEnemy", "assets/soundFX/rotate.mp3");
+    this.load.audio("gotcaught", "assets/soundFX/gotcaught.wav");
     this.load.image("footsteps", "assets/footsteps.png");
     this.load.image("downarrow", "assets/arrow.png");
   }

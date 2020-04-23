@@ -66,7 +66,6 @@ function App() {
   }
 
   return (
-    // displayflex, justify content, align items, hieight 100, width 100
     <div
       style={{
         display: "flex",
