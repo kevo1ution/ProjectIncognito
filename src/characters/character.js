@@ -25,6 +25,10 @@ class Character {
       this.currentTween = null;
     }
 
+    if (this.scanPromise) {
+      this.scanPromise.cancel();
+    }
+
     this.sounds.run.stop();
 
     this.moving = true;
