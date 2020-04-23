@@ -16,6 +16,14 @@ function StartMenu({ setCurrentView }) {
         >
           PLAY
         </Button>
+        <Button
+          onClick={() => setCurrentView(config.VIEW.CONTROLS)}
+          variant="outline-secondary"
+          size="lg"
+          block
+        >
+          Controls
+        </Button>
       </Jumbotron>
     </div>
   );

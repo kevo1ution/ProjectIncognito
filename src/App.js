@@ -7,6 +7,7 @@ import StartMenu from "./components/StartMenu";
 import LevelMenu from "./components/LevelMenu";
 import LostMenu from "./components/LostMenu";
 import WinMenu from "./components/WinMenu";
+import Controls from "./components/Controls";
 
 function App() {
   const [selectedLevel, setSelectedLevel] = useState(1);
@@ -38,6 +39,8 @@ function App() {
             {...{ setCurrentView, selectedLevel, setSelectedLevel }}
           ></WinMenu>
         );
+      case config.VIEW.CONTROLS:
+        return <Controls {...{ setCurrentView }}></Controls>;
       default:
         throw Error("Invalid View: " + currentView);
     }
@@ -55,6 +58,8 @@ function App() {
         return config.SONGS.mainmenu;
       case config.VIEW.WIN:
         return config.SONGS.win;
+      case config.VIEW.CONTROLS:
+        return config.SONGS.mainmenu;
       default:
         throw Error("Invalid View: " + currentView);
     }

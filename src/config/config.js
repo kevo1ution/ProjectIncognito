@@ -55,6 +55,7 @@ const VIEW = {
   GAME: 2,
   LOST: 3,
   WIN: 4,
+  CONTROLS: 5,
 };
 
 const SONGS = {
