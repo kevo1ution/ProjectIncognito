@@ -46,7 +46,7 @@ const GAME = {
     guardSight: 2,
     towerSight: 5,
   },
-  levelCount: 6,
+  levelCount: 9,
 };
 
 const VIEW = {
