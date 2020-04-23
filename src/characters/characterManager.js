@@ -9,6 +9,9 @@ class CharacterManager {
     this.characters = [];
     this.curCharIndex = 0;
     this.scene = scene;
+    this.sounds = {
+      changeCharacters: scene.sound.add("rotateEnemy"),
+    };    
 
     this.loadCharacters();
   }
@@ -96,6 +99,33 @@ class CharacterManager {
       this.characters[lastIndex].onToggle(false);
       this.getCurrentCharacter().onToggle(true);
     }
+
+    // effects
+    this.sounds.changeCharacters.play();
+
+    const charBody = this.getCurrentCharacter().body;
+    const yoffset = config.GAME.tileSize.y / 1.5;
+    const arrow = this.scene.add.image(
+      charBody.x,
+      charBody.y - yoffset,
+      "downarrow"
+    );
+    arrow.setScale(0.3, 0.3);
+    arrow.setDepth(0);
+
+    const arrowTween = this.scene.tweens.add({
+      alpha: 1,
+      targets: arrow,
+      duration: 1000,
+      onUpdate: () => {
+        arrow.x = charBody.x;
+        arrow.y = charBody.y - yoffset;
+      },
+      onComplete: () => {
+        arrowTween.remove();
+        arrow.destroy();
+      },
+    });
   }
 
   getCharacterXY(targetPos) {

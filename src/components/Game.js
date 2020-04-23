@@ -32,7 +32,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
         const curCharBody = scene.characterManager.getCurrentCharacter().body;
         scene.map.lightupGuards(
           { x: curCharBody.x, y: curCharBody.y },
-          config.GAME.tileSize.x,
+          config.GAME.tileSize.x * 3,
           0
         );
         setTimeout(() => {
@@ -133,6 +133,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     this.load.audio("terrainBreaking", "assets/soundFX/terrainbreaking.mp3");
     this.load.audio("rotateEnemy", "assets/soundFX/rotate.mp3");
     this.load.image("footsteps", "assets/footsteps.png");
+    this.load.image("downarrow", "assets/arrow.png");
   }
 
   function create() {
