@@ -357,6 +357,7 @@ class Map {
     return (
       obstacle !== null &&
       this.getBlockingTile(nextPos) === null &&
+      this.layers.win.getTileAtWorldXY(nextPos.x, nextPos.y) === null &&
       this.scene.characterManager.getCharacterWorldXY(nextPos) == null
     );
   }
