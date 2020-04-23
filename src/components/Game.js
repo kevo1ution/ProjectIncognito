@@ -48,7 +48,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
       caughtSound.play();
 
       setTimeout(() => {
-        setCurrentView(config.VIEW.LOST);
+        setCurrentView(config.VIEW.LOST, reason);
       }, 1000);
     });
   }

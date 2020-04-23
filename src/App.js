@@ -9,6 +9,7 @@ import LostMenu from "./components/LostMenu";
 import WinMenu from "./components/WinMenu";
 import Controls from "./components/Controls";
 
+let deathReason = config.GAME.characters.death.FALL;
 function App() {
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [currentView, setCurrentView] = useState(config.VIEW.START_MENU);
@@ -25,14 +26,21 @@ function App() {
         return (
           <Game
             {...{
-              setCurrentView,
+              setCurrentView: (view, arg) => {
+                if (arg) {
+                  deathReason = arg;
+                }
+                setCurrentView(view);
+              },
               selectedLevel,
               setSelectedLevel,
             }}
           ></Game>
         );
       case config.VIEW.LOST:
-        return <LostMenu {...{ setCurrentView }}></LostMenu>;
+        return (
+          <LostMenu {...{ setCurrentView, reason: deathReason }}></LostMenu>
+        );
       case config.VIEW.WIN:
         return (
           <WinMenu
