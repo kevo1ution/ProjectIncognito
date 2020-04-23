@@ -310,6 +310,11 @@ class Map {
   }
 
   breakWeakTerrain(posWorld) {
+    const tile = this.layers.cracked.getTileAtWorldXY(posWorld.x, posWorld.y);
+    if (tile && tile.index === config.GAME.tileIndex.cracked.hole) {
+      return;
+    }
+
     this.sounds.terrainBreaking.play({
       seek: 0.4,
     });

@@ -74,7 +74,7 @@ function App() {
         alignItems: "center",
         height: "100vh",
         width: "100vw",
-        backgroundColor: "#303030",
+        backgroundColor: "#504030",
       }}
     >
       <div id="game"></div>

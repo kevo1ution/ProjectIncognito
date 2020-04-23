@@ -29,22 +29,27 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     scene.events.addListener("lose", (reason) => {
       scene.input.keyboard.removeAllListeners();
 
+      const curCharBody = scene.characterManager.getCurrentCharacter().body;
+      const curCharPos = { x: curCharBody.x, y: curCharBody.y };
       if (reason === config.GAME.characters.death.GUARD) {
-        const curCharBody = scene.characterManager.getCurrentCharacter().body;
-        scene.map.lightupGuards(
-          { x: curCharBody.x, y: curCharBody.y },
-          config.GAME.tileSize.x * 3,
-          0
-        );
-
-        caughtSound.play();
-
-        setTimeout(() => {
-          setCurrentView(config.VIEW.LOST);
-        }, 1000);
-      } else {
-        setCurrentView(config.VIEW.LOST);
+        scene.map.lightupGuards(curCharPos, config.GAME.tileSize.x * 3, 0);
       }
+
+      if (reason === config.GAME.characters.death.FALL) {
+        // if demolisher then break it
+        scene.map.breakWeakTerrain(curCharPos);
+        scene.tweens.add({
+          scale: 0,
+          targets: curCharBody,
+          duration: 1000,
+        });
+      }
+
+      caughtSound.play();
+
+      setTimeout(() => {
+        setCurrentView(config.VIEW.LOST);
+      }, 1000);
     });
   }
 

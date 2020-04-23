@@ -7,7 +7,7 @@ function StartMenu({ setCurrentView }) {
   return (
     <div>
       <Jumbotron>
-        <h1 style={{ textAlign: "center" }}>Project Incognito</h1>
+        <h1 style={{ textAlign: "center" }}>PROJECT INCOGNITO</h1>
         <Button
           onClick={() => setCurrentView(config.VIEW.LEVEL_MENU)}
           variant="outline-success"
