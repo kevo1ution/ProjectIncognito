@@ -60,36 +60,28 @@ class Map {
 
     this.scene.anims.create({
       key: "guardleft",
-      frames: [
-        { key: "guard", frame: 3 },
-      ],
+      frames: [{ key: "guard", frame: 3 }],
       frameRate: 4000 / 1,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: "guardright",
-      frames: [
-        { key: "guard", frame: 2 },
-      ],
+      frames: [{ key: "guard", frame: 2 }],
       frameRate: 4000 / 1,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: "guardup",
-      frames: [
-        { key: "guard", frame: 1 },
-      ],
+      frames: [{ key: "guard", frame: 1 }],
       frameRate: 4000 / 1,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: "guarddown",
-      frames: [
-        { key: "guard", frame: 0 },
-      ],
+      frames: [{ key: "guard", frame: 0 }],
       frameRate: 4000 / 1,
       repeat: 1,
     });
@@ -101,7 +93,7 @@ class Map {
     this.scene.characterManager.setupCharacters();
   }
 
-  lightUp(pos, dir, num, tileIndex, alpha = 1) {
+  lightUp(pos, dir, num, tileIndex, alpha = 1, deathReason) {
     const finalPos = { ...pos };
     switch (dir) {
       case 0: // right
@@ -137,6 +129,7 @@ class Map {
         const lightTile = this.layers.light.getTileAt(x, y);
         if (lightTile) {
           lightTile.setAlpha(alpha);
+          lightTile.deathReason = deathReason;
         }
       }
     }
@@ -157,7 +150,8 @@ class Map {
       return tile.index === config.GAME.tileIndex.tower;
     });
 
-    let isPlrSeen = false;
+    let isPlrSeenByGuard = false;
+    let isPlrSeenByTower = false;
     guardTiles.forEach((tile) => {
       switch (tile.rotation) {
         case 0: // right
@@ -176,29 +170,36 @@ class Map {
           throw Error("Invalid direction!");
       }
 
-      isPlrSeen =
-        isPlrSeen ||
+      isPlrSeenByGuard =
+        isPlrSeenByGuard ||
         this.lightUp(
           { x: tile.x, y: tile.y },
           tile.rotation,
           config.GAME.obstacle.guardSight,
           config.GAME.tileIndex.light,
-          0
+          0,
+          config.GAME.characters.death.GUARD
         );
     });
 
     towerTiles.forEach((tile) => {
-      isPlrSeen =
-        isPlrSeen ||
+      isPlrSeenByTower =
+        isPlrSeenByTower ||
         this.lightUp(
           { x: tile.x, y: tile.y },
           tile.rotation,
           config.GAME.obstacle.towerSight,
-          config.GAME.tileIndex.light
+          config.GAME.tileIndex.light,
+          1,
+          config.GAME.characters.death.TOWER
         );
     });
 
-    return isPlrSeen;
+    if (isPlrSeenByGuard) {
+      return config.GAME.characters.death.GUARD;
+    } else if (isPlrSeenByTower) {
+      return config.GAME.characters.death.TOWER;
+    }
   }
 
   setupStartPos() {
@@ -226,7 +227,8 @@ class Map {
   }
 
   isGuardedTile(posWorld) {
-    return this.layers.light.getTileAtWorldXY(posWorld.x, posWorld.y) !== null;
+    const tile = this.layers.light.getTileAtWorldXY(posWorld.x, posWorld.y);
+    return tile && tile.deathReason;
   }
 
   isWin(posWorld) {
@@ -257,10 +259,10 @@ class Map {
       );
     }
 
-    const isPlrSeen = this.setupLightLayer();
+    const deathReason = this.setupLightLayer();
 
-    if (isPlrSeen) {
-      this.scene.events.emit("lose");
+    if (deathReason) {
+      this.scene.events.emit("lose", deathReason);
     }
   }
 
@@ -294,7 +296,8 @@ class Map {
               tile.rotation,
               config.GAME.obstacle.guardSight,
               config.GAME.tileIndex.light,
-              tile.body.alpha
+              tile.body.alpha,
+              config.GAME.characters.death.GUARD
             );
           },
           onComplete: () => {

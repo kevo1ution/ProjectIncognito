@@ -140,9 +140,9 @@ class Character {
 
     this.body.anims.play(this.spriteName + dir, true);
 
-    if(this.sounds.run.isPaused){
+    if (this.sounds.run.isPaused) {
       this.sounds.run.resume();
-    }else{
+    } else {
       this.sounds.run.play();
     }
   }
@@ -153,8 +153,11 @@ class Character {
       this.currentTween = null;
     }
 
-    if (targetPos && this.deadlyMove(targetPos)) {
-      this.scene.events.emit("lose");
+    if (targetPos) {
+      const reason = this.deadlyMove(targetPos);
+      if (reason) {
+        this.scene.events.emit("lose", reason);
+      }
     }
     if (targetPos && this.scene.map.isWin(targetPos)) {
       this.scene.characterManager.removeCharacterInLineup(this);
@@ -223,10 +226,11 @@ class Character {
   }
 
   deadlyMove(targetPos) {
-    return (
-      this.scene.map.isGuardedTile(targetPos) ||
-      this.scene.map.isHole(targetPos)
-    );
+    if (this.scene.map.isHole(targetPos)) {
+      return config.GAME.characters.death.FALL;
+    }
+
+    return this.scene.map.isGuardedTile(targetPos);
   }
 
   canMove(targetPos, dir) {

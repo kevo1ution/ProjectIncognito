@@ -22,6 +22,11 @@ const GAME = {
     depth: 100, // render ordering for sprites
   },
   characters: {
+    death: {
+      FALL: "fall",
+      GUARD: "guard",
+      TOWER: "tower",
+    },
     move: {
       RIGHT: "right",
       DOWN: "down",
@@ -34,7 +39,7 @@ const GAME = {
     recon: {
       viewRadius: 4, // can see guard 4 tiles away
       viewRadiusExpansionTime: 1500, // 4 seconds for radius ring to expand to full size
-      guardFadeTime: 2000, // 4 seconds and guard dissappears
+      guardFadeTime: 4000, // 4 seconds and guard dissappears
     },
   },
   obstacle: {

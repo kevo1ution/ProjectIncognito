@@ -25,8 +25,22 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
       }
     });
 
-    scene.events.addListener("lose", () => {
-      setCurrentView(config.VIEW.LOST);
+    scene.events.addListener("lose", (reason) => {
+      scene.input.keyboard.removeAllListeners();
+
+      if (reason === config.GAME.characters.death.GUARD) {
+        const curCharBody = scene.characterManager.getCurrentCharacter().body;
+        scene.map.lightupGuards(
+          { x: curCharBody.x, y: curCharBody.y },
+          config.GAME.tileSize.x,
+          0
+        );
+        setTimeout(() => {
+          setCurrentView(config.VIEW.LOST);
+        }, 1000);
+      } else {
+        setCurrentView(config.VIEW.LOST);
+      }
     });
   }
 
@@ -111,7 +125,7 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
     this.load.spritesheet("guard", "assets/enemy.png", {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y,
-    });    
+    });
 
     this.load.audio("demolisherrun", "assets/soundFX/run.mp3");
     this.load.audio("reconrun", "assets/soundFX/run.mp3");

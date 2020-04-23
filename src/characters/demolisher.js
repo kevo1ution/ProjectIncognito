@@ -1,12 +1,15 @@
 import Character from "./character";
-
+import config from "../config/config";
 class Demolisher extends Character {
   deadlyMove(targetPos) {
-    return (
-      this.scene.map.isGuardedTile(targetPos) ||
+    if (
       this.scene.map.isHole(targetPos) ||
       this.scene.map.isCracked(targetPos)
-    );
+    ) {
+      return config.GAME.characters.death.FALL;
+    }
+
+    return this.scene.map.isGuardedTile(targetPos);
   }
 
   canMove(targetPos, dir) {
