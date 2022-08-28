@@ -31,7 +31,7 @@ function LostMenu({ setCurrentView, reason }) {
       >
         <div>
           <img
-            src="assets/demolisherTombstone.png"
+            src={process.env.PUBLIC_URL + "/assets/demolisherTombstone.png"}
             width="88vw"
             height="auto"
             alt="demolisher is dead"
@@ -39,13 +39,13 @@ function LostMenu({ setCurrentView, reason }) {
           <img
             width="100vw"
             height="auto"
-            src="assets/scoutTombstone.png"
+            src={process.env.PUBLIC_URL + "/assets/scoutTombstone.png"}
             alt="scout is dead"
           ></img>
           <img
             width="94vw"
             height="auto"
-            src="assets/reconTombstone.png"
+            src={process.env.PUBLIC_URL + "/assets/reconTombstone.png"}
             alt="recon is dead"
           ></img>
         </div>
