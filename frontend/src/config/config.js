@@ -59,9 +59,9 @@ const VIEW = {
 };
 
 const SONGS = {
-  mainmenu: "assets/soundtrack/mainmenu.mp3",
-  ingame: "assets/soundtrack/gameplay.mp3",
-  win: "assets/soundtrack/winsong.mp3",
+  mainmenu: process.env.PUBLIC_URL + "/assets/soundtrack/mainmenu.mp3",
+  ingame: process.env.PUBLIC_URL + "/assets/soundtrack/gameplay.mp3",
+  win: process.env.PUBLIC_URL + "/assets/soundtrack/winsong.mp3",
 };
 
 function getPhaserConfig(preload, create, update) {

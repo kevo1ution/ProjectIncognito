@@ -31,6 +31,8 @@ class Map {
     });
 
     this.tileset = this.map.addTilesetImage("tilesBackground");
+    console.log(this.map)
+    console.log(this.tileset)
     this.layers = {
       background: this.map.createDynamicLayer("backgroundLayer", this.tileset),
       moveable: this.map.createDynamicLayer("moveableLayer", this.tileset),
@@ -43,6 +45,7 @@ class Map {
     };
 
     // setup guard sprites
+    console.log(this.layers)
     this.layers.guard
       .filterTiles((tile) => {
         return tile.index === config.GAME.tileIndex.guard;

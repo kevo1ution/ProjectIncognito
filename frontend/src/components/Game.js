@@ -114,36 +114,36 @@ function setupGame(selectedLevel, setSelectedLevel, setCurrentView) {
   }
 
   function preload() {
-    this.load.image("tilesBackground", "assets/gridtiles.png");
+    this.load.image("tilesBackground", process.env.PUBLIC_URL + "/assets/gridtiles.png");
     this.load.tilemapTiledJSON(
       "map",
-      `assets/levels/level${selectedLevel}.json`
+      process.env.PUBLIC_URL + `/assets/levels/level${selectedLevel}.json`
     );
-    this.load.spritesheet("demolisher", "assets/demolisher.png", {
+    this.load.spritesheet("demolisher", process.env.PUBLIC_URL + "/assets/demolisher.png", {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y,
     });
-    this.load.spritesheet("recon", "assets/recon.png", {
+    this.load.spritesheet("recon", process.env.PUBLIC_URL + "/assets/recon.png", {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y,
     });
-    this.load.spritesheet("scout", "assets/scout.png", {
+    this.load.spritesheet("scout", process.env.PUBLIC_URL + "/assets/scout.png", {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y,
     });
-    this.load.spritesheet("guard", "assets/enemy.png", {
+    this.load.spritesheet("guard", process.env.PUBLIC_URL + "/assets/enemy.png", {
       frameWidth: config.GAME.sprite.size.x,
       frameHeight: config.GAME.sprite.size.y,
     });
 
-    this.load.audio("demolisherrun", "assets/soundFX/run.mp3");
-    this.load.audio("reconrun", "assets/soundFX/run.mp3");
-    this.load.audio("scoutrun", "assets/soundFX/run.mp3");
-    this.load.audio("terrainBreaking", "assets/soundFX/terrainbreaking.mp3");
-    this.load.audio("rotateEnemy", "assets/soundFX/rotate.mp3");
-    this.load.audio("gotcaught", "assets/soundFX/gotcaught.wav");
-    this.load.image("footsteps", "assets/footsteps.png");
-    this.load.image("downarrow", "assets/arrow.png");
+    this.load.audio("demolisherrun", process.env.PUBLIC_URL + "/assets/soundFX/run.mp3");
+    this.load.audio("reconrun", process.env.PUBLIC_URL +  "/assets/soundFX/run.mp3");
+    this.load.audio("scoutrun",process.env.PUBLIC_URL +   "/assets/soundFX/run.mp3");
+    this.load.audio("terrainBreaking", process.env.PUBLIC_URL + "/assets/soundFX/terrainbreaking.mp3");
+    this.load.audio("rotateEnemy", process.env.PUBLIC_URL + "/assets/soundFX/rotate.mp3");
+    this.load.audio("gotcaught", process.env.PUBLIC_URL + "/assets/soundFX/gotcaught.wav");
+    this.load.image("footsteps",process.env.PUBLIC_URL +  "/assets/footsteps.png");
+    this.load.image("downarrow", process.env.PUBLIC_URL + "/assets/arrow.png");
   }
 
   function create() {
