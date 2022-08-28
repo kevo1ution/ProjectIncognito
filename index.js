@@ -31,7 +31,6 @@
  * @returns {BoardGameResult}
  */
  function onRoomStart() {
-  console.log("onRoomStart")
   return {};
 }
 
@@ -42,8 +41,9 @@
  * @returns {BoardGameResult}
  */
 function onPlayerJoin(player, boardGame) {
-  console.log("onPlayerJoin", player, boardGame)
-  return {};
+  return {
+    joinable: false
+  };
 }
 
 /**
@@ -54,7 +54,6 @@ function onPlayerJoin(player, boardGame) {
  * @returns {BoardGameResult}
  */
 function onPlayerMove(player, move, boardGame) {
-  console.log("onPlayerJoin", player, move, boardGame)
   return {};
 }
 
@@ -65,8 +64,9 @@ function onPlayerMove(player, move, boardGame) {
  * @returns {BoardGameResult}
  */
 function onPlayerQuit(player, boardGame) {
-  console.log("onPlayerQuit", player, boardGame)
-  return {};
+  return {
+    finished: true
+  };
 }
 
 module.exports = {
