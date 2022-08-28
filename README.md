@@ -1,6 +1,6 @@
 # Project Incognito
 
-> Fun puzzler game that is deployed at [urturn](https://urturn.app). TODO: link actual game
+> Fun puzzler game that is deployed at [urturn](https://www.urturn.app/games/630af4b26c3be1000e26aca4).
 
 You play as three characters who each have a different ability. It is your duty to help them escape!
 
